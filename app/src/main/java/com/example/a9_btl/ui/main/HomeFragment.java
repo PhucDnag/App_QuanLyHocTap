@@ -23,7 +23,7 @@ import com.example.a9_btl.ui.quiz.QuizActivity;
 
 public class HomeFragment extends Fragment {
 
-    private CardView cardCourse, cardQuiz, cardAssignment, cardChat;
+    private CardView cardCourse, cardQuiz, cardAssignment, cardAbility;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
         cardCourse = view.findViewById(R.id.cardCourse);
         cardQuiz = view.findViewById(R.id.cardQuiz);
         cardAssignment = view.findViewById(R.id.cardAssignment);
-        cardChat = view.findViewById(R.id.cardChat);
+        cardAbility = view.findViewById(R.id.cardAbility);
 
         // 2. Bắt sự kiện Click cho nút "BÀI HỌC"
         cardCourse.setOnClickListener(v -> {
@@ -65,15 +65,9 @@ public class HomeFragment extends Fragment {
             startActivity(intent);
         });
 
-        cardChat.setOnClickListener(v -> {
-            // 1. Tìm cái thanh Menu dưới đáy (BottomNavigation) đang nằm ở MainActivity
-            com.google.android.material.bottomnavigation.BottomNavigationView bottomNav =
-                    getActivity().findViewById(R.id.bottomNavigation);
-
-            // 2. Ra lệnh cho nó: "Hãy chuyển sang tab Chat ngay lập tức!"
-            if (bottomNav != null) {
-                bottomNav.setSelectedItemId(R.id.nav_chat);
-            }
+        cardAbility.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), StudentAbilityActivity.class);
+            startActivity(intent);
         });
     }
     @Override

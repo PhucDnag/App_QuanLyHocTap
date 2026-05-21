@@ -103,6 +103,30 @@
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardAnalytics"
+                android:layout_width="match_parent"
+                android:layout_height="96dp"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="#E3F2FD"
+                app:cardElevation="2dp"
+                android:clickable="true"
+                android:foreground="?attr/selectableItemBackground">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="18dp">
+                    <ImageView android:layout_width="40dp" android:layout_height="40dp" android:src="@android:drawable/ic_menu_sort_by_size" app:tint="#1976D2"/>
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="14dp" android:orientation="vertical">
+                        <TextView android:text="Thống kê học tập" android:textStyle="bold" android:textColor="#1976D2" android:textSize="16sp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                        <TextView android:text="Tỷ lệ hoàn thành, phổ điểm và cảnh báo câu hỏi sai nhiều" android:textColor="#455A64" android:textSize="13sp" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
         </LinearLayout>
     </ScrollView>
 

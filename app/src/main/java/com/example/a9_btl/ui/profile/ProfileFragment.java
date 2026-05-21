@@ -35,6 +35,7 @@ public class ProfileFragment extends Fragment {
     private static final String KEY_DARK_MODE = "KEY_DARK_MODE";
 
     private TextView tvFullName, tvClass;
+    private com.google.android.material.textfield.TextInputLayout tilFullName;
     private TextInputEditText edtFullName;
     private ImageView imgAvatar;
     private MaterialButton btnLogout, btnSaveProfile, btnChangeAvatar, btnToggleDarkMode;
@@ -63,6 +64,7 @@ public class ProfileFragment extends Fragment {
 
         tvFullName = view.findViewById(R.id.tvFullName);
         tvClass = view.findViewById(R.id.tvClass);
+        tilFullName = view.findViewById(R.id.tilFullName);
         edtFullName = view.findViewById(R.id.edtFullName);
         imgAvatar = view.findViewById(R.id.imgAvatar);
         btnChangeAvatar = view.findViewById(R.id.btnChangeAvatar);
@@ -88,12 +90,15 @@ public class ProfileFragment extends Fragment {
     private void loadUserProfile(int userId) {
         User user = dbHelper.getUserById(userId);
         if (user != null) {
+            boolean isTeacher = user.getQuyenHan() == 2;
             tvFullName.setText(user.getHoTen());
-            tvClass.setText("Lớp: " + user.getMaLop());
+            tvClass.setText(isTeacher ? "Giảng viên • Lớp phụ trách: " + user.getMaLop() : "Sinh viên • Lớp: " + user.getMaLop());
+            tilFullName.setHint(isTeacher ? "Tên giảng viên" : "Tên sinh viên");
             edtFullName.setText(user.getHoTen());
         } else {
             tvFullName.setText("Khách");
             tvClass.setText("Chưa đăng nhập");
+            tilFullName.setHint("Họ tên");
             edtFullName.setText("");
         }
     }
@@ -101,7 +106,7 @@ public class ProfileFragment extends Fragment {
     private void saveProfile() {
         String newName = edtFullName.getText() == null ? "" : edtFullName.getText().toString().trim();
         if (newName.isEmpty()) {
-            edtFullName.setError("Vui lòng nhập tên sinh viên");
+            edtFullName.setError("Vui lòng nhập họ tên");
             return;
         }
         if (currentUserId == -1) {

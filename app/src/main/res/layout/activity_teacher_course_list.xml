@@ -3,41 +3,87 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#F5F5F5">
+    android:background="@color/colorBackground"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#1976D2"
+        android:layout_height="88dp"
+        android:background="@color/colorPrimary"
         android:paddingHorizontal="16dp">
 
-        <ImageView android:id="@+id/btnBack" android:layout_width="30dp" android:layout_height="30dp" android:src="@drawable/ic_back_arrow" app:tint="@color/white" android:layout_centerVertical="true"/>
-        <TextView android:text="Khoá học" android:textSize="20sp" android:textStyle="bold" android:textColor="@color/white" android:layout_centerInParent="true" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_centerVertical="true"
+            android:contentDescription="Quay lại"
+            android:padding="5dp"
+            android:src="@drawable/ic_back_arrow"
+            app:tint="@color/white" />
 
-        <Button
-            android:id="@+id/btnNewChapter"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New"
-            android:textColor="#1976D2"
-            android:backgroundTint="@color/white"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quản lý khóa học"
+                android:textColor="@color/white"
+                android:textSize="21sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Thêm, sửa hoặc xóa chương học"
+                android:textColor="#DCEEFF"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNewChapter"
+            android:layout_width="wrap_content"
+            android:layout_height="42dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:minHeight="40dp"/>
+            android:text="Thêm"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary"
+            app:backgroundTint="@color/white"
+            app:cornerRadius="14dp" />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvCourseSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:background="#E3F2FD"
+        android:padding="14dp"
+        android:text="Danh sách chương học"
+        android:textColor="@color/colorPrimary"
+        android:textSize="15sp"
+        android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvChapters"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="16dp"/>
+        android:clipToPadding="false"
+        android:padding="16dp" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavTeacher"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        app:menu="@menu/bottom_nav_menu"/>
+        app:menu="@menu/bottom_nav_menu" />
 </LinearLayout>
