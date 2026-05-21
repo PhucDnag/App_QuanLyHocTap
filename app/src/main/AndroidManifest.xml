@@ -23,6 +23,7 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true" />
+        <activity android:name=".ui.main.StudentAbilityActivity" />
         <activity android:name=".ui.course.CourseActivity" />
         <activity android:name=".ui.course.LessonActivity" />
         <activity android:name=".ui.course.VideoPlayerActivity" />
@@ -37,6 +38,7 @@
         <activity android:name=".ui.teacher.TeacherStudentDetailActivity" />
         <activity android:name=".ui.teacher.TeacherGradingActivity" />
         <activity android:name=".ui.teacher.TeacherChatActivity" />
+        <activity android:name=".ui.teacher.TeacherAnalyticsActivity" />
         <activity android:name=".ui.teacher.TeacherAddEditChapterActivity" />
         <activity android:name=".ui.teacher.TeacherCourseListActivity" />
         <activity android:name=".ui.teacher.TeacherQuizManagerActivity" />

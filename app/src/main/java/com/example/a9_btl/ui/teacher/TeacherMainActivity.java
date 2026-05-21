@@ -21,7 +21,7 @@ import com.google.android.material.navigation.NavigationBarView;
 public class TeacherMainActivity extends AppCompatActivity {
 
     private TextView tvChapterCount, tvClassCount;
-    private CardView cardManageClass, cardManageCourse;
+    private CardView cardManageClass, cardManageCourse, cardAnalytics;
     private DatabaseHelper dbHelper;
     private int teacherId;
 
@@ -41,6 +41,7 @@ public class TeacherMainActivity extends AppCompatActivity {
         tvClassCount = findViewById(R.id.tvClassCount);
         cardManageClass = findViewById(R.id.cardManageClass);
         cardManageCourse = findViewById(R.id.cardManageCourse);
+        cardAnalytics = findViewById(R.id.cardAnalytics);
 
 
         // 3. Load Dữ Liệu Động (Dashboard)
@@ -56,6 +57,11 @@ public class TeacherMainActivity extends AppCompatActivity {
         cardManageCourse.setOnClickListener(v -> {
             // Chuyển sang màn hình Quản lý Chương học (Sẽ làm ở bước sau)
             Intent intent = new Intent(TeacherMainActivity.this, TeacherCourseListActivity.class);
+            startActivity(intent);
+        });
+
+        cardAnalytics.setOnClickListener(v -> {
+            Intent intent = new Intent(TeacherMainActivity.this, TeacherAnalyticsActivity.class);
             startActivity(intent);
         });
 

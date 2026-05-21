@@ -15,6 +15,31 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    public static class TeacherAnalytics {
+        public String className;
+        public int totalStudents;
+        public int totalChapters;
+        public int completedItems;
+        public int totalItems;
+        public int excellentCount;
+        public int goodCount;
+        public int averageCount;
+        public int weakCount;
+        public final List<String> warnings = new ArrayList<>();
+    }
+
+    public static class AbilityItem {
+        public String label;
+        public int scorePercent;
+        public String status;
+
+        public AbilityItem(String label, int scorePercent, String status) {
+            this.label = label;
+            this.scorePercent = scorePercent;
+            this.status = status;
+        }
+    }
+
     private static final String DATABASE_NAME = "KienTrucMayTinh.db";
     private static final int DATABASE_VERSION = 2;
 
@@ -655,6 +680,112 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return hasData;
+    }
+
+    public int getQuestionCountByChapter(int chapterId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int count = 0;
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_QUESTION + " WHERE " + COL_Q_CHAPTER_ID + "=?",
+                new String[]{String.valueOf(chapterId)});
+        if (cursor.moveToFirst()) count = cursor.getInt(0);
+        cursor.close();
+        return count;
+    }
+
+    public TeacherAnalytics getTeacherAnalytics(String className) {
+        TeacherAnalytics analytics = new TeacherAnalytics();
+        analytics.className = className;
+        analytics.totalStudents = getStudentCountByClass(className);
+        analytics.totalChapters = getChapterCount();
+        analytics.totalItems = analytics.totalStudents * analytics.totalChapters;
+
+        List<User> students = getStudentsByClass(className);
+        List<Chapter> chapters = getAllChapters();
+        int totalPercent = 0;
+        int scoreCount = 0;
+        int lowScoreSignals = 0;
+        int unsubmittedSignals = 0;
+
+        for (User student : students) {
+            for (Chapter chapter : chapters) {
+                int totalQuestions = getQuestionCountByChapter(chapter.getMaChuong());
+                int score = getQuizScore(student.getMaNguoiDung(), chapter.getMaChuong());
+                boolean quizDone = totalQuestions == 0 || score >= 0;
+                boolean assignmentDone = !hasAssignmentInChapter(chapter.getMaChuong()) || isAssignmentSubmitted(student.getMaNguoiDung(), chapter.getMaChuong());
+                if (quizDone && assignmentDone) analytics.completedItems++;
+                if (!assignmentDone) unsubmittedSignals++;
+
+                if (totalQuestions > 0 && score >= 0) {
+                    int percent = Math.round((score * 100f) / totalQuestions);
+                    totalPercent += percent;
+                    scoreCount++;
+                    if (percent >= 85) analytics.excellentCount++;
+                    else if (percent >= 70) analytics.goodCount++;
+                    else if (percent >= 50) analytics.averageCount++;
+                    else {
+                        analytics.weakCount++;
+                        lowScoreSignals++;
+                    }
+                }
+            }
+        }
+
+        for (Chapter chapter : chapters) {
+            int totalQuestions = getQuestionCountByChapter(chapter.getMaChuong());
+            if (totalQuestions == 0 || students.isEmpty()) continue;
+            int attempts = 0;
+            int wrong = 0;
+            for (User student : students) {
+                int score = getQuizScore(student.getMaNguoiDung(), chapter.getMaChuong());
+                if (score >= 0) {
+                    attempts += totalQuestions;
+                    wrong += Math.max(0, totalQuestions - score);
+                }
+            }
+            if (attempts > 0) {
+                int wrongRate = Math.round((wrong * 100f) / attempts);
+                if (wrongRate >= 40) {
+                    analytics.warnings.add(chapter.getTenChuong() + ": " + wrongRate + "% lượt trả lời sai, nên ôn lại nội dung trọng tâm.");
+                }
+            }
+        }
+
+        if (analytics.warnings.isEmpty()) {
+            if (lowScoreSignals > 0) analytics.warnings.add("Có " + lowScoreSignals + " lượt điểm dưới 50%, cần theo dõi nhóm sinh viên yếu.");
+            if (unsubmittedSignals > 0) analytics.warnings.add("Có " + unsubmittedSignals + " lượt chưa nộp bài tập, cần nhắc sinh viên hoàn thành.");
+        }
+        if (analytics.warnings.isEmpty()) analytics.warnings.add("Chưa có cảnh báo nghiêm trọng. Lớp đang theo tiến độ tốt.");
+        return analytics;
+    }
+
+    public List<AbilityItem> getStudentAbilityAnalysis(int userId) {
+        List<AbilityItem> result = new ArrayList<>();
+        for (Chapter chapter : getAllChapters()) {
+            int totalQuestions = getQuestionCountByChapter(chapter.getMaChuong());
+            int score = getQuizScore(userId, chapter.getMaChuong());
+            int percent = 0;
+            String status = "Chưa làm quiz";
+            if (totalQuestions > 0 && score >= 0) {
+                percent = Math.round((score * 100f) / totalQuestions);
+                if (percent >= 80) status = "Nắm vững";
+                else if (percent >= 50) status = "Cần luyện thêm";
+                else status = "Cần cải thiện";
+            } else if (totalQuestions == 0) {
+                status = "Chưa có câu hỏi";
+            }
+            result.add(new AbilityItem(getKnowledgeAreaName(chapter), percent, status));
+        }
+        return result;
+    }
+
+    private String getKnowledgeAreaName(Chapter chapter) {
+        String name = chapter.getTenChuong();
+        String lower = name.toLowerCase();
+        if (lower.contains("cpu")) return "CPU";
+        if (lower.contains("bộ nhớ") || lower.contains("bo nho")) return "Bộ nhớ";
+        if (lower.contains("nhị phân") || lower.contains("nhi phan")) return "Hệ nhị phân";
+        if (lower.contains("tổng quan") || lower.contains("tong quan")) return "Tổng quan";
+        return name.replace("Chương " + chapter.getMaChuong() + ":", "").trim();
     }
 
     // Hàm tìm Chương cao nhất đang được mở
