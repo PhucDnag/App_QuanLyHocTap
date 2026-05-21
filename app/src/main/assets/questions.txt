@@ -1,6 +1,17 @@
-1|Máy tính ENIAC ra đời vào năm nào?|1943|1945|1946|1950|C
-1|Thành phần linh kiện chính của máy tính thế hệ thứ nhất là gì?|Bóng bán dẫn|Vi mạch|Đèn điện tử chân không|Chip vi xử lý|C
-2|CPU là viết tắt của cụm từ nào?|Central Process Unit|Central Processing Unit|Control Processing Unit|Computer Personal Unit|B
-2|Thành phần nào trong CPU thực hiện các phép toán số học và logic?|CU|ALU|Registers|Cache|B
-3|Hệ thống bộ nhớ máy tính được tổ chức theo cấu trúc nào?|Phân cấp (Hierarchy)|Ngang hàng|Vòng tròn|Ngẫu nhiên|A
-3|Đĩa CD/DVD thuộc loại bộ nhớ nào?|Bộ nhớ trong|Bộ nhớ quang (Optical)|Bộ nhớ từ|Bộ nhớ Flash|B
+1|Android là hệ điều hành dành chủ yếu cho thiết bị nào?|Máy tính bàn|Thiết bị di động|Máy chủ|Máy in|B
+1|Ngôn ngữ lập trình được Google khuyến khích dùng cho Android hiện nay là gì?|JavaScript|Python|Kotlin|PHP|C
+1|Android Studio dùng để làm gì?|Chỉnh sửa ảnh|Phát triển ứng dụng Android|Xem video|Quản lý cơ sở dữ liệu|B
+1|File giao diện trong Android thường có định dạng gì?|.java|.xml|.html|.css|B
+1|Thành phần nào dùng để hiển thị văn bản trên Android?|Button|ImageView|TextView|EditText|C
+
+2|Layout nào sắp xếp các thành phần theo hàng dọc hoặc ngang?|FrameLayout|LinearLayout|TableLayout|GridLayout|B
+2|Thẻ nào dùng để nhập dữ liệu từ người dùng?|TextView|Button|ImageView|EditText|D
+2|Thuộc tính nào dùng để đặt chiều rộng cho View?|layout_height|gravity|layout_width|padding|C
+2|Button trong Android dùng để làm gì?|Hiển thị ảnh|Nhập văn bản|Tạo nút nhấn|Phát âm thanh|C
+2|Thuộc tính nào dùng để căn giữa nội dung?|src|gravity|textColor|hint|B
+
+3|Phương thức nào dùng để bắt sự kiện nhấn Button?|setOnClickListener()|setText()|findViewById()|onStart()|A
+3|Toast trong Android có chức năng gì?|Lưu dữ liệu|Hiển thị thông báo ngắn|Mở Activity|Phát nhạc|B
+3|Intent trong Android thường dùng để làm gì?|Xử lý ảnh|Chuyển màn hình|Lưu file|Tạo database|B
+3|Hàm nào được gọi đầu tiên khi Activity khởi tạo?|onStop()|onDestroy()|onCreate()|onPause()|C
+3|Listener trong Android dùng để làm gì?|Quản lý file|Lắng nghe và xử lý sự kiện|Hiển thị giao diện|Kết nối mạng|B

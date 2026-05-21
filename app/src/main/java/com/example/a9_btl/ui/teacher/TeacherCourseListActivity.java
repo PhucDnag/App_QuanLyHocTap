@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +23,7 @@ import java.util.List;
 public class TeacherCourseListActivity extends AppCompatActivity {
 
     private RecyclerView rcv;
+    private TextView tvCourseSummary;
     private DatabaseHelper db;
 
     @Override
@@ -30,6 +33,7 @@ public class TeacherCourseListActivity extends AppCompatActivity {
 
         db = new DatabaseHelper(this);
         rcv = findViewById(R.id.rcvChapters);
+        tvCourseSummary = findViewById(R.id.tvCourseSummary);
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
         // Nút Thêm Mới
@@ -51,8 +55,28 @@ public class TeacherCourseListActivity extends AppCompatActivity {
 
     private void loadData() {
         List<Chapter> chapters = db.getAllChapters();
+        tvCourseSummary.setText("Đang có " + chapters.size() + " chương học trong khóa Kiến trúc máy tính");
         ChapterAdapter adapter = new ChapterAdapter(chapters);
         rcv.setAdapter(adapter);
+    }
+
+    private void openEditChapter(Chapter chapter) {
+        Intent intent = new Intent(TeacherCourseListActivity.this, TeacherAddEditChapterActivity.class);
+        intent.putExtra("CHAPTER_ID", chapter.getMaChuong());
+        startActivity(intent);
+    }
+
+    private void confirmDeleteChapter(Chapter chapter) {
+        new AlertDialog.Builder(this)
+                .setTitle("Xóa chương học")
+                .setMessage("Bạn chắc chắn muốn xóa \"" + chapter.getTenChuong() + "\"? Dữ liệu tài liệu, câu hỏi, điểm và bài nộp liên quan cũng sẽ bị xóa.")
+                .setNegativeButton("Hủy", null)
+                .setPositiveButton("Xóa", (dialog, which) -> {
+                    boolean deleted = db.deleteChapterFull(chapter.getMaChuong());
+                    Toast.makeText(this, deleted ? "Đã xóa chương học" : "Không thể xóa chương học", Toast.LENGTH_SHORT).show();
+                    loadData();
+                })
+                .show();
     }
 
     private void setupBottomNavigation() {
@@ -79,34 +103,36 @@ public class TeacherCourseListActivity extends AppCompatActivity {
 
         @NonNull @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            // Tận dụng lại layout item_student_chapter_score.xml cho nhanh, hoặc tạo mới
-            // Ở đây mình dùng layout đơn giản tự tạo trong code (để bạn đỡ phải tạo file xml mới)
-            // Hoặc dùng tạm android.R.layout.simple_list_item_1 nếu muốn nhanh nhất
-            // Nhưng tốt nhất là dùng lại item_assignment_card hoặc tương tự
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_student_chapter_score, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_teacher_chapter, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Chapter c = list.get(position);
+            holder.tvOrder.setText(String.valueOf(c.getThuTuBaiHoc()));
             holder.tvName.setText(c.getTenChuong());
-            holder.tvStatus.setText("Chỉnh sửa >"); // Dùng lại ID tvScore để hiện chữ này
+            String pdf = db.getPdfFileName(c.getMaChuong()).isEmpty() ? "Chưa có PDF" : "Có PDF";
+            String video = db.getVideoFileName(c.getMaChuong()).isEmpty() ? "Chưa có video" : "Có video";
+            String assignment = db.hasAssignmentInChapter(c.getMaChuong()) ? "Có bài tập" : "Chưa có bài tập";
+            holder.tvDesc.setText(pdf + " • " + video + " • " + assignment);
 
-            holder.itemView.setOnClickListener(v -> {
-                Intent intent = new Intent(TeacherCourseListActivity.this, TeacherAddEditChapterActivity.class);
-                intent.putExtra("CHAPTER_ID", c.getMaChuong()); // Truyền ID để Sửa
-                startActivity(intent);
-            });
+            holder.itemView.setOnClickListener(v -> openEditChapter(c));
+            holder.btnEdit.setOnClickListener(v -> openEditChapter(c));
+            holder.btnDelete.setOnClickListener(v -> confirmDeleteChapter(c));
         }
 
         @Override public int getItemCount() { return list.size(); }
         class ViewHolder extends RecyclerView.ViewHolder {
-            TextView tvName, tvStatus;
+            TextView tvOrder, tvName, tvDesc;
+            com.google.android.material.button.MaterialButton btnEdit, btnDelete;
             public ViewHolder(@NonNull View v) {
                 super(v);
+                tvOrder = v.findViewById(R.id.tvChapterOrder);
                 tvName = v.findViewById(R.id.tvChapterName);
-                tvStatus = v.findViewById(R.id.tvScore);
+                tvDesc = v.findViewById(R.id.tvChapterDesc);
+                btnEdit = v.findViewById(R.id.btnEditChapter);
+                btnDelete = v.findViewById(R.id.btnDeleteChapter);
             }
         }
     }

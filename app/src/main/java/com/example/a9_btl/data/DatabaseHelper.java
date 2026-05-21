@@ -207,29 +207,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private void insertSampleData(SQLiteDatabase db) {
         // Dữ liệu User
         // User chính (ID 1)
-        db.execSQL("INSERT INTO " + TABLE_USER + " VALUES(null, 'sv1', '123', 'Nguyễn Văn Em', 1, 'KTPM01')");
+        db.execSQL("INSERT INTO " + TABLE_USER + " VALUES(null, 'sv1', '123', 'Nguyễn Văn Minh', 1, 'CNTT07')");
 
         // --- THÊM BẠN BÈ CÙNG LỚP KTPM01 (Để test tính năng Chat) ---
-        db.execSQL("INSERT INTO " + TABLE_USER + " VALUES(null, 'sv2', '123', 'Trần Thị Hoa', 1, 'KTPM01')");
-        db.execSQL("INSERT INTO " + TABLE_USER + " VALUES(null, 'sv3', '123', 'Lê Văn Nam', 1, 'KTPM01')");
-        db.execSQL("INSERT INTO " + TABLE_USER + " VALUES(null, 'sv4', '123', 'Phạm Quỳnh Anh', 1, 'KTPM01')");
+        db.execSQL("INSERT INTO " + TABLE_USER + " VALUES(null, 'sv2', '123', 'Phạm Thùy Trang', 1, 'CNTT07')");
+        db.execSQL("INSERT INTO " + TABLE_USER + " VALUES(null, 'sv3', '123', 'Trương Hồng Tân', 1, 'CNTT07')");
+        db.execSQL("INSERT INTO " + TABLE_USER + " VALUES(null, 'sv4', '123', 'Hoàng Minh Khải', 1, 'CNTT07')");
 
         // Một bạn lớp khác (Sẽ KHÔNG hiện trong danh sách chat)
         db.execSQL("INSERT INTO " + TABLE_USER + " VALUES(null, 'sv5', '123', 'Người Lớp Khác', 1, 'CNTT02')");
 
         // SỬA DÒNG NÀY: Thầy Hậu dạy 2 lớp là KTPM01 và CNTT02 (ngăn cách bởi dấu phẩy)
-        db.execSQL("INSERT INTO " + TABLE_USER + " VALUES(null, 'gv1', '123', 'Vũ Tuấn Hậu', 2, 'KTPM01,CNTT02')");
+        db.execSQL("INSERT INTO " + TABLE_USER + " VALUES(null, 'gv1', '123', 'Đặng Hồng Phúc', 2, 'CNTT02,CNTT07')");
+        db.execSQL("INSERT INTO " + TABLE_USER + " VALUES(null, 'gv2', '123', 'Nguyễn Kiều Hưng', 2, 'CNTT02,CNTT07')");
 
         // Dữ liệu Chương học
-        db.execSQL("INSERT INTO " + TABLE_CHAPTER + " VALUES(1, 'Chương 1: Tổng quan', 'Lịch sử phát triển máy tính', 1)");
-        db.execSQL("INSERT INTO " + TABLE_CHAPTER + " VALUES(2, 'Chương 2: Cấu trúc CPU', 'Thành phần và chức năng CPU', 2)");
-        db.execSQL("INSERT INTO " + TABLE_CHAPTER + " VALUES(3, 'Chương 3: Bộ nhớ', 'RAM, ROM và bộ nhớ ngoài', 3)");
+        db.execSQL("INSERT INTO " + TABLE_CHAPTER + " VALUES(1, 'Chương 1: Giới thiệu về lập trình di động và thiết kế giao diện trên Android', 'Tìm hiểu tổng quan về lập trình di động, hệ điều hành Android, kiến trúc ứng dụng Android và các thành phần cơ bản trong thiết kế giao diện người dùng.', 1)");
+        db.execSQL("INSERT INTO " + TABLE_CHAPTER + " VALUES(2, 'Chương 2: Thực hành xây dựng giao diện ứng dụng', 'Hướng dẫn xây dựng giao diện ứng dụng Android bằng XML, sử dụng các View, Layout và thiết kế giao diện thân thiện với người dùng.', 2)");
+        db.execSQL("INSERT INTO " + TABLE_CHAPTER + " VALUES(3, 'Chương 3: Xử lý sự kiện trên giao diện ứng dụng', 'Tìm hiểu cách xử lý sự kiện trong Android như nhấn nút, nhập dữ liệu và tương tác giữa người dùng với các thành phần giao diện.', 3)");
 
         // Dữ liệu Tài liệu
         db.execSQL("INSERT INTO " + TABLE_DOCUMENT + " VALUES(null, 1, 'PDF', 'Chuong1.pdf')");
         db.execSQL("INSERT INTO " + TABLE_DOCUMENT + " VALUES(null, 1, 'Video', 'video1.mp4')");
         db.execSQL("INSERT INTO " + TABLE_DOCUMENT + " VALUES(null, 2, 'PDF', 'Chuong2.pdf')");
-        db.execSQL("INSERT INTO " + TABLE_DOCUMENT + " VALUES(null, 1, 'Video', 'video2.mp4')");
+        db.execSQL("INSERT INTO " + TABLE_DOCUMENT + " VALUES(null, 2, 'Video', 'video2.mp4')");
+        db.execSQL("INSERT INTO " + TABLE_DOCUMENT + " VALUES(null, 3, 'PDF', 'Chuong3.pdf')");
+        db.execSQL("INSERT INTO " + TABLE_DOCUMENT + " VALUES(null, 3, 'Video', 'video3.mp4')");
 
 //        // Dữ liệu Câu hỏi Trắc nghiệm
 //        db.execSQL("INSERT INTO " + TABLE_QUESTION + " VALUES(null, 1, 'Máy tính ENIAC ra đời năm nào?', '1945', '1946', '1950', '1955', 'B')");
@@ -240,8 +243,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         importQuestionsFromAssets(db);
 
         // Thêm đề bài mẫu cho Chương 1 và 2
-        db.execSQL("INSERT INTO " + TABLE_ASSIGNMENT + " VALUES(null, 1, 'Hãy tóm tắt lịch sử máy tính qua các giai đoạn.')");
-        db.execSQL("INSERT INTO " + TABLE_ASSIGNMENT + " VALUES(null, 2, 'Câu 1: CPU và Chip có giống nhau hay không? Giải thích chi tiết.')");
+        // Thêm đề bài mẫu cho Chương 1, 2 và 3
+        db.execSQL("INSERT INTO " + TABLE_ASSIGNMENT + " VALUES(null, 1, 'Trình bày khái niệm lập trình di động và vai trò của Android trong phát triển ứng dụng hiện nay.')");
+        db.execSQL("INSERT INTO " + TABLE_ASSIGNMENT + " VALUES(null, 2, 'Thiết kế giao diện đăng nhập đơn giản trên Android gồm TextView, EditText và Button bằng XML.')");
+        db.execSQL("INSERT INTO " + TABLE_ASSIGNMENT + " VALUES(null, 3, 'Viết chương trình xử lý sự kiện khi người dùng nhấn Button và hiển thị thông báo bằng Toast trong Android.')");
 
         // Thêm vài tin nhắn mẫu cho xôm tụ
         // Tin nhắn nhóm lớp
@@ -1261,6 +1266,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cvAss.put(COL_ASS_CONTENT, assignment);
             db.insert(TABLE_ASSIGNMENT, null, cvAss);
         }
+    }
+
+    public boolean deleteChapterFull(int chapterId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_DOCUMENT, COL_DOC_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
+        db.delete(TABLE_QUESTION, COL_Q_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
+        db.delete(TABLE_SCORE, COL_SCORE_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
+
+        Cursor cursor = db.rawQuery("SELECT " + COL_ASS_ID + " FROM " + TABLE_ASSIGNMENT + " WHERE " + COL_ASS_CHAPTER_ID + "=?",
+                new String[]{String.valueOf(chapterId)});
+        while (cursor.moveToNext()) {
+            db.delete(TABLE_SUBMISSION, COL_SUB_ASS_ID + "=?", new String[]{String.valueOf(cursor.getInt(0))});
+        }
+        cursor.close();
+        db.delete(TABLE_ASSIGNMENT, COL_ASS_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
+        int rows = db.delete(TABLE_CHAPTER, COL_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
+        return rows > 0;
     }
 
     // Hàm phụ: Thêm tài liệu
