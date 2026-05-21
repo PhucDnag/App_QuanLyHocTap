@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
+
+    <RelativeLayout
+        android:id="@+id/layoutHeader"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#1976D2"
+        android:paddingHorizontal="16dp">
+        <ImageView android:id="@+id/btnBack" android:layout_width="30dp" android:layout_height="30dp" android:src="@drawable/ic_back_arrow" app:tint="@color/white" android:layout_centerVertical="true"/>
+        <TextView android:id="@+id/tvStudentNameTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tên Sinh Viên" android:textSize="20sp" android:textStyle="bold" android:textColor="@color/white" android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavTeacher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        app:menu="@menu/bottom_nav_menu" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/layoutHeader"
+        android:layout_above="@id/bottomNavTeacher"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@android:color/white">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+                <TextView android:text="Tiến độ học tập" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textStyle="bold" android:textColor="@android:color/black" android:textSize="16sp"/>
+                <TextView android:id="@+id/tvCurrentProgress" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Đang tải..." android:textSize="18sp" android:textColor="#1976D2" android:layout_marginTop="8dp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chi tiết điểm &amp; Bài tập (Nhấn để chấm):"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="8dp"
+            android:textColor="#757575"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcvScoreList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="16dp"
+            android:clipToPadding="false"/>
+    </LinearLayout>
+
+</RelativeLayout>

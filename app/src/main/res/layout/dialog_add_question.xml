@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="#FFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvDialogTitle"
+            android:text="Thêm câu hỏi mới"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText android:id="@+id/edtQuestionContent" android:hint="Nhập nội dung câu hỏi..." android:background="@android:drawable/edit_text" android:minHeight="48dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp"/>
+
+        <EditText android:id="@+id/edtOpA" android:hint="Đáp án A" android:background="@android:drawable/edit_text" android:minHeight="48dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp"/>
+        <EditText android:id="@+id/edtOpB" android:hint="Đáp án B" android:background="@android:drawable/edit_text" android:minHeight="48dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp"/>
+        <EditText android:id="@+id/edtOpC" android:hint="Đáp án C" android:background="@android:drawable/edit_text" android:minHeight="48dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp"/>
+        <EditText android:id="@+id/edtOpD" android:hint="Đáp án D" android:background="@android:drawable/edit_text" android:minHeight="48dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="12dp"/>
+
+        <TextView android:text="Chọn đáp án đúng:" android:textStyle="bold" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+        <RadioGroup
+            android:id="@+id/rgCorrectAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
+            <RadioButton android:id="@+id/rbA" android:text="A" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="16dp"/>
+            <RadioButton android:id="@+id/rbB" android:text="B" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="16dp"/>
+            <RadioButton android:id="@+id/rbC" android:text="C" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="16dp"/>
+            <RadioButton android:id="@+id/rbD" android:text="D" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/btnSaveQuestion"
+            android:text="Lưu câu hỏi"
+            android:backgroundTint="#1976D2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</ScrollView>
