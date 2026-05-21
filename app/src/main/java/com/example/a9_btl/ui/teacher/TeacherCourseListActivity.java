@@ -55,7 +55,7 @@ public class TeacherCourseListActivity extends AppCompatActivity {
 
     private void loadData() {
         List<Chapter> chapters = db.getAllChapters();
-        tvCourseSummary.setText("Đang có " + chapters.size() + " chương học trong khóa Kiến trúc máy tính");
+        tvCourseSummary.setText("Đang có " + chapters.size() + " chương học trong khóa Lập trình Android");
         ChapterAdapter adapter = new ChapterAdapter(chapters);
         rcv.setAdapter(adapter);
     }
