@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme._9_BTL">
         <activity
+            android:name=".ui.auth.RegisterActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.auth.LoginActivity"
             android:exported="true">
             <intent-filter>
