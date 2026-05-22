@@ -1,5 +1,6 @@
 package com.example.a9_btl.data;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -343,7 +344,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.close();
             return user;
         }
+        cursor.close();
         return null; // Đăng nhập thất bại
+    }
+
+    public boolean isUsernameExists(String username) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT " + COL_USER_ID + " FROM " + TABLE_USER + " WHERE " + COL_USERNAME + "=? LIMIT 1",
+                new String[]{username}
+        );
+        boolean exists = cursor.moveToFirst();
+        cursor.close();
+        return exists;
+    }
+
+    public long registerUser(String username, String password, String fullName, int role, String classCode) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_USERNAME, username);
+        values.put(COL_PASSWORD, password);
+        values.put(COL_FULLNAME, fullName);
+        values.put(COL_ROLE, role);
+        values.put(COL_CLASS, classCode);
+        return db.insert(TABLE_USER, null, values);
     }
 
     // 5. Lấy danh sách Câu hỏi theo Chương (Mới cho Quiz)
