@@ -42,7 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private static final String DATABASE_NAME = "KienTrucMayTinh.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // --- 1. ĐỊNH NGHĨA CÁC HẰNG SỐ (CONSTANTS) ---
 
@@ -254,12 +254,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Sửa lại insertSampleData trong DatabaseHelper.java
 
         // Tin nhắn nhóm lớp (QUAN TRỌNG: Phải để số 1 ở cuối để coi là ĐÃ ĐỌC)
-        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 1, 'Chào cả lớp', 'Lớp KTPM01', '10:00', 1)");
-        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 2, 'Chào thầy ạ', 'Lớp KTPM01', '10:05', 1)");
+        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 6, 'Chào lớp CNTT07, hôm nay các em đọc trước tài liệu Chương 2 nhé.', 'Lớp CNTT07', '08:05', 1)");
+        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 1, 'Dạ thầy, em đã tải tài liệu về rồi ạ.', 'Lớp CNTT07', '08:08', 1)");
+        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 2, 'Thầy ơi phần bài tập Chương 1 nộp đến khi nào ạ?', 'Lớp CNTT07', '08:12', 1)");
+        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 6, 'Hạn nộp là 22h tối nay, các em chú ý hoàn thành đúng hạn.', 'Lớp CNTT07', '08:15', 1)");
 
-        // Tin riêng
-        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 2, 'Alo bạn ơi', '1_2', '11:00', 1)");
-        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 1, 'Sao thế?', '1_2', '11:02', 1)");
+        // Tin riêng mẫu giữa sinh viên và bạn cùng lớp / giảng viên
+        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 2, 'Minh ơi, cậu làm xong câu hỏi ôn tập chưa?', '1_2', '09:20', 1)");
+        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 1, 'Mình làm gần xong rồi, lát gửi cậu phần gợi ý nhé.', '1_2', '09:24', 1)");
+        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 6, 'Minh nhớ bổ sung ảnh giao diện vào bài nộp nhé.', '1_6', '14:10', 1)");
+        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 1, 'Dạ vâng thầy, em sẽ cập nhật ngay ạ.', '1_6', '14:18', 1)");
+        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 3, 'Tối nay nhóm mình ôn quiz Chương 2 không?', '1_3', '19:30', 1)");
     }
 
     // ==========================================================
@@ -615,6 +620,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT " + COL_FULLNAME + " FROM " + TABLE_USER +
                         " WHERE " + COL_CLASS + "=? AND " + COL_USER_ID + "!=?",
                 new String[]{maLop, String.valueOf(myId)});
+
+        if (cursor.moveToFirst()) {
+            do {
+                names.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return names;
+    }
+
+    public List<String> getTeachersByClass(String maLop) {
+        List<String> names = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT " + COL_FULLNAME + " FROM " + TABLE_USER +
+                        " WHERE " + COL_ROLE + "=2 AND (" + COL_CLASS + "=? OR " + COL_CLASS + " LIKE ? OR " + COL_CLASS + " LIKE ? OR " + COL_CLASS + " LIKE ?)",
+                new String[]{maLop, maLop + ",%", "%," + maLop + ",%", "%," + maLop});
 
         if (cursor.moveToFirst()) {
             do {

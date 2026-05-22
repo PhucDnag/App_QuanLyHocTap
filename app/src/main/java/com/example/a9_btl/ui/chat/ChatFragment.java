@@ -100,7 +100,10 @@ public class ChatFragment extends Fragment {
             String myClass = dbHelper.getUserClass(myId);
             if (!myClass.isEmpty()) {
                 originalList.add("Lớp " + myClass);
-                originalList.add("Vũ Tuấn Hậu (GV)");
+                List<String> teachers = dbHelper.getTeachersByClass(myClass);
+                for (String teacherName : teachers) {
+                    originalList.add(teacherName + " (GV)");
+                }
                 List<String> classmates = dbHelper.getClassmates(myClass, myId);
                 originalList.addAll(classmates);
             } else {
@@ -205,6 +208,7 @@ public class ChatFragment extends Fragment {
                     holder.tvName.setTypeface(null, Typeface.NORMAL);
                 }
             }
+            holder.viewUnreadDot.setVisibility(hasUnread ? View.VISIBLE : View.GONE);
 
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(getContext(), ChatActivity.class);
@@ -222,10 +226,12 @@ public class ChatFragment extends Fragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView tvName, tvLastMessage;
+            View viewUnreadDot;
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 tvName = itemView.findViewById(R.id.tvName); // Đảm bảo ID đúng trong item_conversation.xml
                 tvLastMessage = itemView.findViewById(R.id.tvLastMessage);
+                viewUnreadDot = itemView.findViewById(R.id.viewUnreadDot);
             }
         }
     }

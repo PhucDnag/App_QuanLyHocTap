@@ -35,7 +35,12 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigation = findViewById(R.id.bottomNavigation);
 
         // 2. Mặc định load HomeFragment khi vừa mở ứng dụng
-        if (savedInstanceState == null) {
+        boolean navigateToProfile = getIntent().hasExtra("NAVIGATE_TO")
+                && "PROFILE".equals(getIntent().getStringExtra("NAVIGATE_TO"));
+        boolean navigateToChat = getIntent().hasExtra("NAVIGATE_TO")
+                && "CHAT".equals(getIntent().getStringExtra("NAVIGATE_TO"));
+
+        if (savedInstanceState == null && !navigateToProfile && !navigateToChat) {
             loadFragment(new HomeFragment());
         }
 
@@ -95,12 +100,13 @@ public class MainActivity extends AppCompatActivity {
         if (getIntent().hasExtra("NAVIGATE_TO")) {
             String tabName = getIntent().getStringExtra("NAVIGATE_TO");
 
-            if (tabName.equals("CHAT")) {
+            if ("CHAT".equals(tabName)) {
                 // Tự động bấm vào nút Chat
                 bottomNavigation.setSelectedItemId(R.id.nav_chat);
-            } else if (tabName.equals("PROFILE")) {
-                // Tự động bấm vào nút Profile
+            } else if ("PROFILE".equals(tabName)) {
+                // Mở trực tiếp hồ sơ để giảng viên không bị điều hướng ngược về màn teacher home
                 bottomNavigation.setSelectedItemId(R.id.nav_profile);
+                loadFragment(new ProfileFragment());
             }
         }
     }
@@ -120,6 +126,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateChatBadge(); // <--- GỌI HÀM CẬP NHẬT BADGE
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        updateChatBadge();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        updateChatBadge();
     }
 
     private void updateChatBadge() {
