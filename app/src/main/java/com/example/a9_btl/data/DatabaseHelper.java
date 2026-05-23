@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.a9_btl.model.Chapter; // Import Model Chapter
 import com.example.a9_btl.model.Question; // Import Model Question
-import com.example.a9_btl.model.User;    // Import Model User
+import com.example.a9_btl.model.User; // Import Model User
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,7 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_DOCUMENT = "TaiLieu";
     public static final String COL_DOC_ID = "MaTaiLieu";
     public static final String COL_DOC_CHAPTER_ID = "MaChuong";
-    public static final String COL_DOC_TYPE = "Loai";      // 'PDF' hoặc 'Video'
+    public static final String COL_DOC_TYPE = "Loai"; // 'PDF' hoặc 'Video'
     public static final String COL_DOC_FILENAME = "TenFile"; // Tên file trong Assets
 
     // Bảng Câu hỏi (Mới)
@@ -100,7 +100,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_SUB_ASS_ID = "MaBT";
     public static final String COL_SUB_TEXT = "TraLoiVanBan";
     public static final String COL_SUB_FILE = "DuongDanFile"; // Lưu URI của file PDF/Word
-    public static final String COL_SUB_GRADE = "DiemGV";      // Mới
+    public static final String COL_SUB_GRADE = "DiemGV"; // Mới
     public static final String COL_SUB_FEEDBACK = "NhanXetGV"; // Mới
 
     // --- BẢNG MỚI: TIN NHẮN (CHAT) ---
@@ -176,8 +176,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL_SUB_ASS_ID + " INTEGER, " +
                 COL_SUB_TEXT + " TEXT, " +
                 COL_SUB_FILE + " TEXT, " +
-                COL_SUB_GRADE + " REAL DEFAULT -1, " +     // Thêm cột điểm (-1 là chưa chấm)
-                COL_SUB_FEEDBACK + " TEXT)");              // Thêm cột nhận xét
+                COL_SUB_GRADE + " REAL DEFAULT -1, " + // Thêm cột điểm (-1 là chưa chấm)
+                COL_SUB_FEEDBACK + " TEXT)"); // Thêm cột nhận xét
 
         String createMessageTable = "CREATE TABLE " + TABLE_MESSAGE + " (" +
                 COL_MSG_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -223,9 +223,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO " + TABLE_USER + " VALUES(null, 'gv2', '123', 'Nguyễn Kiều Hưng', 2, 'CNTT02,CNTT07')");
 
         // Dữ liệu Chương học
-        db.execSQL("INSERT INTO " + TABLE_CHAPTER + " VALUES(1, 'Chương 1: Giới thiệu về lập trình di động và thiết kế giao diện trên Android', 'Tìm hiểu tổng quan về lập trình di động, hệ điều hành Android, kiến trúc ứng dụng Android và các thành phần cơ bản trong thiết kế giao diện người dùng.', 1)");
-        db.execSQL("INSERT INTO " + TABLE_CHAPTER + " VALUES(2, 'Chương 2: Thực hành xây dựng giao diện ứng dụng', 'Hướng dẫn xây dựng giao diện ứng dụng Android bằng XML, sử dụng các View, Layout và thiết kế giao diện thân thiện với người dùng.', 2)");
-        db.execSQL("INSERT INTO " + TABLE_CHAPTER + " VALUES(3, 'Chương 3: Xử lý sự kiện trên giao diện ứng dụng', 'Tìm hiểu cách xử lý sự kiện trong Android như nhấn nút, nhập dữ liệu và tương tác giữa người dùng với các thành phần giao diện.', 3)");
+        db.execSQL("INSERT INTO " + TABLE_CHAPTER
+                + " VALUES(1, 'Chương 1: Giới thiệu về lập trình di động và thiết kế giao diện trên Android', 'Tìm hiểu tổng quan về lập trình di động, hệ điều hành Android, kiến trúc ứng dụng Android và các thành phần cơ bản trong thiết kế giao diện người dùng.', 1)");
+        db.execSQL("INSERT INTO " + TABLE_CHAPTER
+                + " VALUES(2, 'Chương 2: Thực hành xây dựng giao diện ứng dụng', 'Hướng dẫn xây dựng giao diện ứng dụng Android bằng XML, sử dụng các View, Layout và thiết kế giao diện thân thiện với người dùng.', 2)");
+        db.execSQL("INSERT INTO " + TABLE_CHAPTER
+                + " VALUES(3, 'Chương 3: Xử lý sự kiện trên giao diện ứng dụng', 'Tìm hiểu cách xử lý sự kiện trong Android như nhấn nút, nhập dữ liệu và tương tác giữa người dùng với các thành phần giao diện.', 3)");
 
         // Dữ liệu Tài liệu
         db.execSQL("INSERT INTO " + TABLE_DOCUMENT + " VALUES(null, 1, 'PDF', 'Chuong1.pdf')");
@@ -235,36 +238,52 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO " + TABLE_DOCUMENT + " VALUES(null, 3, 'PDF', 'Chuong3.pdf')");
         db.execSQL("INSERT INTO " + TABLE_DOCUMENT + " VALUES(null, 3, 'Video', 'video3.mp4')");
 
-//        // Dữ liệu Câu hỏi Trắc nghiệm
-//        db.execSQL("INSERT INTO " + TABLE_QUESTION + " VALUES(null, 1, 'Máy tính ENIAC ra đời năm nào?', '1945', '1946', '1950', '1955', 'B')");
-//        db.execSQL("INSERT INTO " + TABLE_QUESTION + " VALUES(null, 1, 'Thế hệ máy tính thứ nhất dùng linh kiện gì?', 'Bóng bán dẫn', 'Vi mạch', 'Đèn điện tử chân không', 'Chip AI', 'C')");
-//        db.execSQL("INSERT INTO " + TABLE_QUESTION + " VALUES(null, 2, 'ALU là viết tắt của gì?', 'Arithmetic Logic Unit', 'All Logic Unit', 'Array Logic Unit', 'Area Logic Unit', 'A')");
-
+        // // Dữ liệu Câu hỏi Trắc nghiệm
+        // db.execSQL("INSERT INTO " + TABLE_QUESTION + " VALUES(null, 1, 'Máy tính
+        // ENIAC ra đời năm nào?', '1945', '1946', '1950', '1955', 'B')");
+        // db.execSQL("INSERT INTO " + TABLE_QUESTION + " VALUES(null, 1, 'Thế hệ máy
+        // tính thứ nhất dùng linh kiện gì?', 'Bóng bán dẫn', 'Vi mạch', 'Đèn điện tử
+        // chân không', 'Chip AI', 'C')");
+        // db.execSQL("INSERT INTO " + TABLE_QUESTION + " VALUES(null, 2, 'ALU là viết
+        // tắt của gì?', 'Arithmetic Logic Unit', 'All Logic Unit', 'Array Logic Unit',
+        // 'Area Logic Unit', 'A')");
 
         importQuestionsFromAssets(db);
 
         // Thêm đề bài mẫu cho Chương 1 và 2
         // Thêm đề bài mẫu cho Chương 1, 2 và 3
-        db.execSQL("INSERT INTO " + TABLE_ASSIGNMENT + " VALUES(null, 1, 'Trình bày khái niệm lập trình di động và vai trò của Android trong phát triển ứng dụng hiện nay.')");
-        db.execSQL("INSERT INTO " + TABLE_ASSIGNMENT + " VALUES(null, 2, 'Thiết kế giao diện đăng nhập đơn giản trên Android gồm TextView, EditText và Button bằng XML.')");
-        db.execSQL("INSERT INTO " + TABLE_ASSIGNMENT + " VALUES(null, 3, 'Viết chương trình xử lý sự kiện khi người dùng nhấn Button và hiển thị thông báo bằng Toast trong Android.')");
+        db.execSQL("INSERT INTO " + TABLE_ASSIGNMENT
+                + " VALUES(null, 1, 'Trình bày khái niệm lập trình di động và vai trò của Android trong phát triển ứng dụng hiện nay.')");
+        db.execSQL("INSERT INTO " + TABLE_ASSIGNMENT
+                + " VALUES(null, 2, 'Thiết kế giao diện đăng nhập đơn giản trên Android gồm TextView, EditText và Button bằng XML.')");
+        db.execSQL("INSERT INTO " + TABLE_ASSIGNMENT
+                + " VALUES(null, 3, 'Viết chương trình xử lý sự kiện khi người dùng nhấn Button và hiển thị thông báo bằng Toast trong Android.')");
 
         // Thêm vài tin nhắn mẫu cho xôm tụ
         // Tin nhắn nhóm lớp
         // Sửa lại insertSampleData trong DatabaseHelper.java
 
         // Tin nhắn nhóm lớp (QUAN TRỌNG: Phải để số 1 ở cuối để coi là ĐÃ ĐỌC)
-        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 6, 'Chào lớp CNTT07, hôm nay các em đọc trước tài liệu Chương 2 nhé.', 'Lớp CNTT07', '08:05', 1)");
-        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 1, 'Dạ thầy, em đã tải tài liệu về rồi ạ.', 'Lớp CNTT07', '08:08', 1)");
-        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 2, 'Thầy ơi phần bài tập Chương 1 nộp đến khi nào ạ?', 'Lớp CNTT07', '08:12', 1)");
-        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 6, 'Hạn nộp là 22h tối nay, các em chú ý hoàn thành đúng hạn.', 'Lớp CNTT07', '08:15', 1)");
+        db.execSQL("INSERT INTO " + TABLE_MESSAGE
+                + " VALUES(null, 6, 'Chào lớp CNTT07, hôm nay các em đọc trước tài liệu Chương 2 nhé.', 'Lớp CNTT07', '08:05', 1)");
+        db.execSQL("INSERT INTO " + TABLE_MESSAGE
+                + " VALUES(null, 1, 'Dạ thầy, em đã tải tài liệu về rồi ạ.', 'Lớp CNTT07', '08:08', 1)");
+        db.execSQL("INSERT INTO " + TABLE_MESSAGE
+                + " VALUES(null, 2, 'Thầy ơi phần bài tập Chương 1 nộp đến khi nào ạ?', 'Lớp CNTT07', '08:12', 1)");
+        db.execSQL("INSERT INTO " + TABLE_MESSAGE
+                + " VALUES(null, 6, 'Hạn nộp là 22h tối nay, các em chú ý hoàn thành đúng hạn.', 'Lớp CNTT07', '08:15', 1)");
 
         // Tin riêng mẫu giữa sinh viên và bạn cùng lớp / giảng viên
-        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 2, 'Minh ơi, cậu làm xong câu hỏi ôn tập chưa?', '1_2', '09:20', 1)");
-        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 1, 'Mình làm gần xong rồi, lát gửi cậu phần gợi ý nhé.', '1_2', '09:24', 1)");
-        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 6, 'Minh nhớ bổ sung ảnh giao diện vào bài nộp nhé.', '1_6', '14:10', 1)");
-        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 1, 'Dạ vâng thầy, em sẽ cập nhật ngay ạ.', '1_6', '14:18', 1)");
-        db.execSQL("INSERT INTO " + TABLE_MESSAGE + " VALUES(null, 3, 'Tối nay nhóm mình ôn quiz Chương 2 không?', '1_3', '19:30', 1)");
+        db.execSQL("INSERT INTO " + TABLE_MESSAGE
+                + " VALUES(null, 2, 'Minh ơi, cậu làm xong câu hỏi ôn tập chưa?', '1_2', '09:20', 1)");
+        db.execSQL("INSERT INTO " + TABLE_MESSAGE
+                + " VALUES(null, 1, 'Mình làm gần xong rồi, lát gửi cậu phần gợi ý nhé.', '1_2', '09:24', 1)");
+        db.execSQL("INSERT INTO " + TABLE_MESSAGE
+                + " VALUES(null, 6, 'Minh nhớ bổ sung ảnh giao diện vào bài nộp nhé.', '1_6', '14:10', 1)");
+        db.execSQL("INSERT INTO " + TABLE_MESSAGE
+                + " VALUES(null, 1, 'Dạ vâng thầy, em sẽ cập nhật ngay ạ.', '1_6', '14:18', 1)");
+        db.execSQL("INSERT INTO " + TABLE_MESSAGE
+                + " VALUES(null, 3, 'Tối nay nhóm mình ôn quiz Chương 2 không?', '1_3', '19:30', 1)");
     }
 
     // ==========================================================
@@ -278,8 +297,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(
                 "SELECT " + COL_DOC_FILENAME + " FROM " + TABLE_DOCUMENT +
                         " WHERE " + COL_DOC_CHAPTER_ID + "=? AND " + COL_DOC_TYPE + "='PDF'",
-                new String[]{String.valueOf(maChuong)}
-        );
+                new String[] { String.valueOf(maChuong) });
         if (cursor != null && cursor.moveToFirst()) {
             fileName = cursor.getString(0);
             cursor.close();
@@ -294,8 +312,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(
                 "SELECT " + COL_DOC_FILENAME + " FROM " + TABLE_DOCUMENT +
                         " WHERE " + COL_DOC_CHAPTER_ID + "=? AND " + COL_DOC_TYPE + "='Video'",
-                new String[]{String.valueOf(maChuong)}
-        );
+                new String[] { String.valueOf(maChuong) });
         if (cursor != null && cursor.moveToFirst()) {
             fileName = cursor.getString(0);
             cursor.close();
@@ -334,17 +351,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(
                 "SELECT * FROM " + TABLE_USER + " WHERE " + COL_USERNAME + "=? AND " + COL_PASSWORD + "=?",
-                new String[]{username, password}
-        );
+                new String[] { username, password });
 
         if (cursor.moveToFirst()) {
             User user = new User();
             user.setMaNguoiDung(cursor.getInt(0)); // Cột 0: ID
             user.setTenDangNhap(cursor.getString(1)); // Cột 1: Username
             // Cột 2: Password
-            user.setHoTen(cursor.getString(3));    // Cột 3: Họ tên
-            user.setQuyenHan(cursor.getInt(4));    // Cột 4: Quyền hạn
-            user.setMaLop(cursor.getString(5));    // Cột 5: Mã lớp
+            user.setHoTen(cursor.getString(3)); // Cột 3: Họ tên
+            user.setQuyenHan(cursor.getInt(4)); // Cột 4: Quyền hạn
+            user.setMaLop(cursor.getString(5)); // Cột 5: Mã lớp
 
             cursor.close();
             return user;
@@ -357,8 +373,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(
                 "SELECT " + COL_USER_ID + " FROM " + TABLE_USER + " WHERE " + COL_USERNAME + "=? LIMIT 1",
-                new String[]{username}
-        );
+                new String[] { username });
         boolean exists = cursor.moveToFirst();
         cursor.close();
         return exists;
@@ -383,12 +398,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String query = "SELECT * FROM " + TABLE_QUESTION + " WHERE " + COL_Q_CHAPTER_ID + " = ?";
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(chapterId)});
+        Cursor cursor = db.rawQuery(query, new String[] { String.valueOf(chapterId) });
 
         if (cursor.moveToFirst()) {
             do {
                 // 1. LẤY ID (QUAN TRỌNG)
-                // Giả sử cột ID là cột đầu tiên (index 0). Hoặc dùng cursor.getColumnIndex(COL_Q_ID)
+                // Giả sử cột ID là cột đầu tiên (index 0). Hoặc dùng
+                // cursor.getColumnIndex(COL_Q_ID)
                 int id = cursor.getInt(0);
 
                 String content = cursor.getString(cursor.getColumnIndexOrThrow(COL_Q_CONTENT));
@@ -418,7 +434,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Thử cập nhật điểm cũ trước
         int rows = db.update(TABLE_SCORE, values,
                 COL_SCORE_USER_ID + "=? AND " + COL_SCORE_CHAPTER_ID + "=?",
-                new String[]{String.valueOf(userId), String.valueOf(chapterId)});
+                new String[] { String.valueOf(userId), String.valueOf(chapterId) });
 
         // Nếu không tìm thấy dòng nào để cập nhật -> Thêm mới
         if (rows == 0) {
@@ -435,8 +451,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(
                 "SELECT " + COL_SCORE_VALUE + " FROM " + TABLE_SCORE +
                         " WHERE " + COL_SCORE_USER_ID + "=? AND " + COL_SCORE_CHAPTER_ID + "=?",
-                new String[]{String.valueOf(userId), String.valueOf(chapterId)}
-        );
+                new String[] { String.valueOf(userId), String.valueOf(chapterId) });
 
         if (cursor.moveToFirst()) {
             score = cursor.getInt(0);
@@ -449,7 +464,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public String getAssignmentQuestion(int chapterId) {
         SQLiteDatabase db = this.getReadableDatabase();
         String question = "Không có bài tập cho chương này.";
-        Cursor cursor = db.rawQuery("SELECT " + COL_ASS_CONTENT + " FROM " + TABLE_ASSIGNMENT + " WHERE " + COL_ASS_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
+        Cursor cursor = db.rawQuery(
+                "SELECT " + COL_ASS_CONTENT + " FROM " + TABLE_ASSIGNMENT + " WHERE " + COL_ASS_CHAPTER_ID + "=?",
+                new String[] { String.valueOf(chapterId) });
         if (cursor.moveToFirst()) {
             question = cursor.getString(0);
         }
@@ -463,8 +480,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Lấy ID bài tập dựa trên chương (Giả sử mỗi chương 1 bài)
         // Trong thực tế cần logic phức tạp hơn, nhưng BTL làm vậy là ổn
         int assId = 0;
-        Cursor c = db.rawQuery("SELECT " + COL_ASS_ID + " FROM " + TABLE_ASSIGNMENT + " WHERE " + COL_ASS_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
-        if(c.moveToFirst()) assId = c.getInt(0);
+        Cursor c = db.rawQuery(
+                "SELECT " + COL_ASS_ID + " FROM " + TABLE_ASSIGNMENT + " WHERE " + COL_ASS_CHAPTER_ID + "=?",
+                new String[] { String.valueOf(chapterId) });
+        if (c.moveToFirst())
+            assId = c.getInt(0);
         c.close();
 
         if (assId > 0) {
@@ -485,15 +505,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // Lấy ID bài tập của chương này
         int assId = 0;
-        Cursor c1 = db.rawQuery("SELECT " + COL_ASS_ID + " FROM " + TABLE_ASSIGNMENT + " WHERE " + COL_ASS_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
-        if (c1.moveToFirst()) assId = c1.getInt(0);
+        Cursor c1 = db.rawQuery(
+                "SELECT " + COL_ASS_ID + " FROM " + TABLE_ASSIGNMENT + " WHERE " + COL_ASS_CHAPTER_ID + "=?",
+                new String[] { String.valueOf(chapterId) });
+        if (c1.moveToFirst())
+            assId = c1.getInt(0);
         c1.close();
 
         if (assId > 0) {
             // Tìm trong bảng NopBai
             Cursor c2 = db.rawQuery("SELECT " + COL_SUB_TEXT + ", " + COL_SUB_FILE + " FROM " + TABLE_SUBMISSION +
-                            " WHERE " + COL_SUB_USER_ID + "=? AND " + COL_SUB_ASS_ID + "=?",
-                    new String[]{String.valueOf(userId), String.valueOf(assId)});
+                    " WHERE " + COL_SUB_USER_ID + "=? AND " + COL_SUB_ASS_ID + "=?",
+                    new String[] { String.valueOf(userId), String.valueOf(assId) });
 
             if (c2.moveToFirst()) {
                 result = new String[2];
@@ -529,7 +552,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "LEFT JOIN " + TABLE_USER + " u ON m." + COL_MSG_SENDER_ID + " = u." + COL_USER_ID +
                 " WHERE m." + COL_MSG_ROOM + " = ?"; // <-- ĐIỀU KIỆN LỌC
 
-        return db.rawQuery(query, new String[]{roomName});
+        return db.rawQuery(query, new String[] { roomName });
     }
 
     // Sửa lại hàm getLastMessage (Thêm tham số myId)
@@ -544,7 +567,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " WHERE m." + COL_MSG_ROOM + "=? " +
                 " ORDER BY m." + COL_MSG_ID + " DESC LIMIT 1";
 
-        Cursor cursor = db.rawQuery(query, new String[]{roomId});
+        Cursor cursor = db.rawQuery(query, new String[] { roomId });
 
         if (cursor.moveToFirst()) {
             String content = cursor.getString(0);
@@ -557,7 +580,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 finalResult = "Bạn: " + content;
             } else {
                 // Nếu là người khác -> Hiện "Tên: ..."
-                if (senderName == null) senderName = "Ẩn danh";
+                if (senderName == null)
+                    senderName = "Ẩn danh";
 
                 // Cắt lấy tên cuối cùng (Ví dụ: Trần Thị Hoa -> Hoa)
                 String[] nameParts = senderName.split(" ");
@@ -573,7 +597,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Hàm lấy thông tin User theo ID (để hiện lên Profile)
     public User getUserById(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE " + COL_USER_ID + "=?", new String[]{String.valueOf(userId)});
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE " + COL_USER_ID + "=?",
+                new String[] { String.valueOf(userId) });
 
         if (cursor.moveToFirst()) {
             User user = new User();
@@ -595,7 +620,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         android.content.ContentValues values = new android.content.ContentValues();
         values.put(COL_FULLNAME, fullName);
-        int rows = db.update(TABLE_USER, values, COL_USER_ID + "=?", new String[]{String.valueOf(userId)});
+        int rows = db.update(TABLE_USER, values, COL_USER_ID + "=?", new String[] { String.valueOf(userId) });
         return rows > 0;
     }
 
@@ -603,7 +628,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public String getUserClass(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         String maLop = "";
-        Cursor cursor = db.rawQuery("SELECT " + COL_CLASS + " FROM " + TABLE_USER + " WHERE " + COL_USER_ID + "=?", new String[]{String.valueOf(userId)});
+        Cursor cursor = db.rawQuery("SELECT " + COL_CLASS + " FROM " + TABLE_USER + " WHERE " + COL_USER_ID + "=?",
+                new String[] { String.valueOf(userId) });
         if (cursor.moveToFirst()) {
             maLop = cursor.getString(0);
         }
@@ -618,8 +644,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // Lấy Họ Tên của những người cùng MaLop nhưng khác ID của mình
         Cursor cursor = db.rawQuery("SELECT " + COL_FULLNAME + " FROM " + TABLE_USER +
-                        " WHERE " + COL_CLASS + "=? AND " + COL_USER_ID + "!=?",
-                new String[]{maLop, String.valueOf(myId)});
+                " WHERE " + COL_CLASS + "=? AND " + COL_USER_ID + "!=?",
+                new String[] { maLop, String.valueOf(myId) });
 
         if (cursor.moveToFirst()) {
             do {
@@ -635,8 +661,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT " + COL_FULLNAME + " FROM " + TABLE_USER +
-                        " WHERE " + COL_ROLE + "=2 AND (" + COL_CLASS + "=? OR " + COL_CLASS + " LIKE ? OR " + COL_CLASS + " LIKE ? OR " + COL_CLASS + " LIKE ?)",
-                new String[]{maLop, maLop + ",%", "%," + maLop + ",%", "%," + maLop});
+                " WHERE " + COL_ROLE + "=2 AND (" + COL_CLASS + "=? OR " + COL_CLASS + " LIKE ? OR " + COL_CLASS
+                + " LIKE ? OR " + COL_CLASS + " LIKE ?)",
+                new String[] { maLop, maLop + ",%", "%," + maLop + ",%", "%," + maLop });
 
         if (cursor.moveToFirst()) {
             do {
@@ -651,7 +678,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public int getUserIdByName(String fullname) {
         SQLiteDatabase db = this.getReadableDatabase();
         int id = -1; // Mặc định là không tìm thấy
-        Cursor cursor = db.rawQuery("SELECT " + COL_USER_ID + " FROM " + TABLE_USER + " WHERE " + COL_FULLNAME + "=?", new String[]{fullname});
+        Cursor cursor = db.rawQuery("SELECT " + COL_USER_ID + " FROM " + TABLE_USER + " WHERE " + COL_FULLNAME + "=?",
+                new String[] { fullname });
         if (cursor.moveToFirst()) {
             id = cursor.getInt(0);
         }
@@ -672,7 +700,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 " JOIN " + TABLE_ASSIGNMENT + " a ON s." + COL_SUB_ASS_ID + " = a." + COL_ASS_ID +
                 " WHERE s." + COL_SUB_USER_ID + "=? AND a." + COL_ASS_CHAPTER_ID + "=?";
 
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userId), String.valueOf(chapterId)});
+        Cursor cursor = db.rawQuery(query, new String[] { String.valueOf(userId), String.valueOf(chapterId) });
 
         boolean isSubmitted = false;
         if (cursor.moveToFirst()) {
@@ -685,7 +713,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean isChapterUnlocked(int userId, int chapterId) {
         // Chương 1 luôn mở cho học viên mới vào
-        if (chapterId == 1) return true;
+        if (chapterId == 1)
+            return true;
 
         // Muốn học chương hiện tại, phải hoàn thành chương trước đó
         int prevChapterId = chapterId - 1;
@@ -708,7 +737,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // --- ĐIỀU KIỆN 2: NỘP BÀI TẬP ---
         boolean isAssignmentDone = isAssignmentSubmitted(userId, prevChapterId);
 
-        // Nếu chương trước KHÔNG CÓ bài tập nào -> Thì coi như đã nộp (để không bị kẹt mãi mãi)
+        // Nếu chương trước KHÔNG CÓ bài tập nào -> Thì coi như đã nộp (để không bị kẹt
+        // mãi mãi)
         if (!hasAssignmentInChapter(prevChapterId)) {
             isAssignmentDone = true;
         }
@@ -787,8 +817,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean hasAssignmentInChapter(int chapterId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_ASSIGNMENT +
-                        " WHERE " + COL_ASS_CHAPTER_ID + "=?",
-                new String[]{String.valueOf(chapterId)});
+                " WHERE " + COL_ASS_CHAPTER_ID + "=?",
+                new String[] { String.valueOf(chapterId) });
         boolean hasData = false;
         if (cursor.moveToFirst()) {
             hasData = cursor.getInt(0) > 0;
@@ -801,8 +831,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         int count = 0;
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_QUESTION + " WHERE " + COL_Q_CHAPTER_ID + "=?",
-                new String[]{String.valueOf(chapterId)});
-        if (cursor.moveToFirst()) count = cursor.getInt(0);
+                new String[] { String.valueOf(chapterId) });
+        if (cursor.moveToFirst())
+            count = cursor.getInt(0);
         cursor.close();
         return count;
     }
@@ -826,17 +857,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 int totalQuestions = getQuestionCountByChapter(chapter.getMaChuong());
                 int score = getQuizScore(student.getMaNguoiDung(), chapter.getMaChuong());
                 boolean quizDone = totalQuestions == 0 || score >= 0;
-                boolean assignmentDone = !hasAssignmentInChapter(chapter.getMaChuong()) || isAssignmentSubmitted(student.getMaNguoiDung(), chapter.getMaChuong());
-                if (quizDone && assignmentDone) analytics.completedItems++;
-                if (!assignmentDone) unsubmittedSignals++;
+                boolean assignmentDone = !hasAssignmentInChapter(chapter.getMaChuong())
+                        || isAssignmentSubmitted(student.getMaNguoiDung(), chapter.getMaChuong());
+                if (quizDone && assignmentDone)
+                    analytics.completedItems++;
+                if (!assignmentDone)
+                    unsubmittedSignals++;
 
                 if (totalQuestions > 0 && score >= 0) {
                     int percent = Math.round((score * 100f) / totalQuestions);
                     totalPercent += percent;
                     scoreCount++;
-                    if (percent >= 85) analytics.excellentCount++;
-                    else if (percent >= 70) analytics.goodCount++;
-                    else if (percent >= 50) analytics.averageCount++;
+                    if (percent >= 85)
+                        analytics.excellentCount++;
+                    else if (percent >= 70)
+                        analytics.goodCount++;
+                    else if (percent >= 50)
+                        analytics.averageCount++;
                     else {
                         analytics.weakCount++;
                         lowScoreSignals++;
@@ -847,7 +884,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         for (Chapter chapter : chapters) {
             int totalQuestions = getQuestionCountByChapter(chapter.getMaChuong());
-            if (totalQuestions == 0 || students.isEmpty()) continue;
+            if (totalQuestions == 0 || students.isEmpty())
+                continue;
             int attempts = 0;
             int wrong = 0;
             for (User student : students) {
@@ -860,16 +898,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if (attempts > 0) {
                 int wrongRate = Math.round((wrong * 100f) / attempts);
                 if (wrongRate >= 40) {
-                    analytics.warnings.add(chapter.getTenChuong() + ": " + wrongRate + "% lượt trả lời sai, nên ôn lại nội dung trọng tâm.");
+                    analytics.warnings.add(chapter.getTenChuong() + ": " + wrongRate
+                            + "% lượt trả lời sai, nên ôn lại nội dung trọng tâm.");
                 }
             }
         }
 
         if (analytics.warnings.isEmpty()) {
-            if (lowScoreSignals > 0) analytics.warnings.add("Có " + lowScoreSignals + " lượt điểm dưới 50%, cần theo dõi nhóm sinh viên yếu.");
-            if (unsubmittedSignals > 0) analytics.warnings.add("Có " + unsubmittedSignals + " lượt chưa nộp bài tập, cần nhắc sinh viên hoàn thành.");
+            if (lowScoreSignals > 0)
+                analytics.warnings
+                        .add("Có " + lowScoreSignals + " lượt điểm dưới 50%, cần theo dõi nhóm sinh viên yếu.");
+            if (unsubmittedSignals > 0)
+                analytics.warnings
+                        .add("Có " + unsubmittedSignals + " lượt chưa nộp bài tập, cần nhắc sinh viên hoàn thành.");
         }
-        if (analytics.warnings.isEmpty()) analytics.warnings.add("Chưa có cảnh báo nghiêm trọng. Lớp đang theo tiến độ tốt.");
+        if (analytics.warnings.isEmpty())
+            analytics.warnings.add("Chưa có cảnh báo nghiêm trọng. Lớp đang theo tiến độ tốt.");
         return analytics;
     }
 
@@ -882,9 +926,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String status = "Chưa làm quiz";
             if (totalQuestions > 0 && score >= 0) {
                 percent = Math.round((score * 100f) / totalQuestions);
-                if (percent >= 80) status = "Nắm vững";
-                else if (percent >= 50) status = "Cần luyện thêm";
-                else status = "Cần cải thiện";
+                if (percent >= 80)
+                    status = "Nắm vững";
+                else if (percent >= 50)
+                    status = "Cần luyện thêm";
+                else
+                    status = "Cần cải thiện";
             } else if (totalQuestions == 0) {
                 status = "Chưa có câu hỏi";
             }
@@ -896,10 +943,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private String getKnowledgeAreaName(Chapter chapter) {
         String name = chapter.getTenChuong();
         String lower = name.toLowerCase();
-        if (lower.contains("cpu")) return "CPU";
-        if (lower.contains("bộ nhớ") || lower.contains("bo nho")) return "Bộ nhớ";
-        if (lower.contains("nhị phân") || lower.contains("nhi phan")) return "Hệ nhị phân";
-        if (lower.contains("tổng quan") || lower.contains("tong quan")) return "Tổng quan";
+        if (lower.contains("cpu"))
+            return "CPU";
+        if (lower.contains("bộ nhớ") || lower.contains("bo nho"))
+            return "Bộ nhớ";
+        if (lower.contains("nhị phân") || lower.contains("nhi phan"))
+            return "Hệ nhị phân";
+        if (lower.contains("tổng quan") || lower.contains("tong quan"))
+            return "Tổng quan";
         return name.replace("Chương " + chapter.getMaChuong() + ":", "").trim();
     }
 
@@ -914,13 +965,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if (isChapterUnlocked(userId, c.getMaChuong())) {
                 current = c; // Nếu mở thì tạm ghi nhận là chương hiện tại
             } else {
-                // Nếu gặp chương bị khoá -> Dừng lại ngay, chương trước đó chính là chương hiện tại
+                // Nếu gặp chương bị khoá -> Dừng lại ngay, chương trước đó chính là chương hiện
+                // tại
                 break;
             }
         }
 
         // Nếu chưa mở chương nào (hiếm gặp) thì trả về chương 1
-        if (current == null && !chapters.isEmpty()) return chapters.get(0);
+        if (current == null && !chapters.isEmpty())
+            return chapters.get(0);
 
         return current;
     }
@@ -932,7 +985,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         long lastId = 0;
         // Lấy ID lớn nhất (tin mới nhất) của phòng đó
-        Cursor cursor = db.rawQuery("SELECT MAX(" + COL_MSG_ID + ") FROM " + TABLE_MESSAGE + " WHERE " + COL_MSG_ROOM + "=?", new String[]{roomId});
+        Cursor cursor = db.rawQuery(
+                "SELECT MAX(" + COL_MSG_ID + ") FROM " + TABLE_MESSAGE + " WHERE " + COL_MSG_ROOM + "=?",
+                new String[] { roomId });
         if (cursor.moveToFirst()) {
             lastId = cursor.getLong(0);
         }
@@ -949,7 +1004,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = "SELECT COUNT(*) FROM " + TABLE_MESSAGE +
                 " WHERE " + COL_MSG_ROOM + "=? AND " + COL_MSG_SENDER_ID + "!=? AND IsRead=0";
 
-        Cursor cursor = db.rawQuery(query, new String[]{roomId, String.valueOf(myId)});
+        Cursor cursor = db.rawQuery(query, new String[] { roomId, String.valueOf(myId) });
         if (cursor.moveToFirst()) {
             hasUnread = cursor.getInt(0) > 0;
         }
@@ -963,7 +1018,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         android.content.ContentValues values = new android.content.ContentValues();
         values.put("IsRead", 1); // 1 = Đã xem
 
-        db.update(TABLE_MESSAGE, values, COL_MSG_ROOM + "=?", new String[]{roomId});
+        db.update(TABLE_MESSAGE, values, COL_MSG_ROOM + "=?", new String[] { roomId });
     }
 
     // Kiểm tra xem user này có bất kỳ tin nhắn chưa đọc nào không (của bất kỳ ai)
@@ -975,7 +1030,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = "SELECT COUNT(*) FROM " + TABLE_MESSAGE +
                 " WHERE " + COL_MSG_SENDER_ID + "!=? AND IsRead=0";
 
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(myUserId)});
+        Cursor cursor = db.rawQuery(query, new String[] { String.valueOf(myUserId) });
         if (cursor.moveToFirst()) {
             int count = cursor.getInt(0);
             hasUnread = (count > 0);
@@ -990,7 +1045,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int count = 0;
         String query = "SELECT COUNT(*) FROM " + TABLE_MESSAGE +
                 " WHERE " + COL_MSG_SENDER_ID + "!=? AND IsRead=0";
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(myUserId)});
+        Cursor cursor = db.rawQuery(query, new String[] { String.valueOf(myUserId) });
         if (cursor.moveToFirst()) {
             count = cursor.getInt(0);
         }
@@ -1024,7 +1079,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
                     // Câu lệnh Insert
                     String sql = "INSERT INTO " + TABLE_QUESTION + " VALUES(null, ?, ?, ?, ?, ?, ?, ?)";
-                    db.execSQL(sql, new Object[]{chapterId, content, a, b, c, d, correct});
+                    db.execSQL(sql, new Object[] { chapterId, content, a, b, c, d, correct });
                 }
             }
             db.setTransactionSuccessful(); // Xác nhận thành công
@@ -1040,7 +1095,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<String> getAllClasses() {
         List<String> list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT DISTINCT " + COL_CLASS + " FROM " + TABLE_USER + " WHERE " + COL_CLASS + " IS NOT NULL", null);
+        Cursor cursor = db.rawQuery(
+                "SELECT DISTINCT " + COL_CLASS + " FROM " + TABLE_USER + " WHERE " + COL_CLASS + " IS NOT NULL", null);
         if (cursor.moveToFirst()) {
             do {
                 list.add(cursor.getString(0));
@@ -1056,8 +1112,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         // Lấy những user có quyền = 1 (Sinh viên) và thuộc lớp này
         Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_USER +
-                        " WHERE " + COL_CLASS + "=? AND " + COL_ROLE + "=1",
-                new String[]{maLop});
+                " WHERE " + COL_CLASS + "=? AND " + COL_ROLE + "=1",
+                new String[] { maLop });
         if (cursor.moveToFirst()) {
             do {
                 User u = new User();
@@ -1092,7 +1148,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         // Chỉ lấy MaLop của đúng ông giáo viên đang đăng nhập
-        Cursor cursor = db.rawQuery("SELECT " + COL_CLASS + " FROM " + TABLE_USER + " WHERE " + COL_USER_ID + "=?", new String[]{String.valueOf(teacherId)});
+        Cursor cursor = db.rawQuery("SELECT " + COL_CLASS + " FROM " + TABLE_USER + " WHERE " + COL_USER_ID + "=?",
+                new String[] { String.valueOf(teacherId) });
 
         if (cursor.moveToFirst()) {
             String classString = cursor.getString(0);
@@ -1133,8 +1190,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int count = 0;
         // Đếm User có Role=1 (Sinh viên) và thuộc lớp className
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_USER +
-                        " WHERE " + COL_CLASS + "=? AND " + COL_ROLE + "=1",
-                new String[]{className});
+                " WHERE " + COL_CLASS + "=? AND " + COL_ROLE + "=1",
+                new String[] { className });
 
         if (cursor.moveToFirst()) {
             count = cursor.getInt(0);
@@ -1150,8 +1207,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // 1. Tìm ID bài tập
         int assId = 0;
-        Cursor c = db.rawQuery("SELECT " + COL_ASS_ID + " FROM " + TABLE_ASSIGNMENT + " WHERE " + COL_ASS_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
-        if(c.moveToFirst()) assId = c.getInt(0);
+        Cursor c = db.rawQuery(
+                "SELECT " + COL_ASS_ID + " FROM " + TABLE_ASSIGNMENT + " WHERE " + COL_ASS_CHAPTER_ID + "=?",
+                new String[] { String.valueOf(chapterId) });
+        if (c.moveToFirst())
+            assId = c.getInt(0);
         c.close();
 
         // 2. Cập nhật điểm
@@ -1163,24 +1223,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // SỬA LẠI DÒNG NÀY CHO ĐÚNG CÚ PHÁP SQL:
             db.update(TABLE_SUBMISSION, values,
                     COL_SUB_USER_ID + "=? AND " + COL_SUB_ASS_ID + "=?",
-                    new String[]{String.valueOf(userId), String.valueOf(assId)});
+                    new String[] { String.valueOf(userId), String.valueOf(assId) });
         }
     }
 
-    // Lấy thông tin bài làm kèm điểm số (Trả về mảng 4 phần tử: Text, File, Điểm, Nhận xét)
+    // Lấy thông tin bài làm kèm điểm số (Trả về mảng 4 phần tử: Text, File, Điểm,
+    // Nhận xét)
     public String[] getSubmissionFullDetail(int userId, int chapterId) {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] result = null;
         int assId = 0;
-        Cursor c1 = db.rawQuery("SELECT " + COL_ASS_ID + " FROM " + TABLE_ASSIGNMENT + " WHERE " + COL_ASS_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
-        if (c1.moveToFirst()) assId = c1.getInt(0);
+        Cursor c1 = db.rawQuery(
+                "SELECT " + COL_ASS_ID + " FROM " + TABLE_ASSIGNMENT + " WHERE " + COL_ASS_CHAPTER_ID + "=?",
+                new String[] { String.valueOf(chapterId) });
+        if (c1.moveToFirst())
+            assId = c1.getInt(0);
         c1.close();
 
         if (assId > 0) {
-            Cursor c2 = db.rawQuery("SELECT " + COL_SUB_TEXT + ", " + COL_SUB_FILE + ", " + COL_SUB_GRADE + ", " + COL_SUB_FEEDBACK +
+            Cursor c2 = db.rawQuery(
+                    "SELECT " + COL_SUB_TEXT + ", " + COL_SUB_FILE + ", " + COL_SUB_GRADE + ", " + COL_SUB_FEEDBACK +
                             " FROM " + TABLE_SUBMISSION +
                             " WHERE " + COL_SUB_USER_ID + "=? AND " + COL_SUB_ASS_ID + "=?",
-                    new String[]{String.valueOf(userId), String.valueOf(assId)});
+                    new String[] { String.valueOf(userId), String.valueOf(assId) });
             if (c2.moveToFirst()) {
                 result = new String[4];
                 result[0] = c2.getString(0); // Bài làm
@@ -1193,7 +1258,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    // 1. Lấy danh sách tất cả cuộc trò chuyện của Giáo Viên (Gồm Lớp học + Chat riêng)
+    // 1. Lấy danh sách tất cả cuộc trò chuyện của Giáo Viên (Gồm Lớp học + Chat
+    // riêng)
     // Trả về danh sách tên phòng (Room ID)
     // --- [MỚI] HÀM LẤY DANH SÁCH CHAT CHO GIÁO VIÊN ---
     public List<String> getTeacherConversations(int teacherId) {
@@ -1209,8 +1275,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // 2. Lấy danh sách Sinh viên nhắn tin riêng (Private Chat)
         // Tìm các phòng có chứa ID giáo viên (VD: "1_5" hoặc "5_2")
         Cursor cursor = db.rawQuery("SELECT DISTINCT " + COL_MSG_ROOM + " FROM " + TABLE_MESSAGE +
-                        " WHERE " + COL_MSG_ROOM + " LIKE ? OR " + COL_MSG_ROOM + " LIKE ?",
-                new String[]{ "%_" + teacherId, teacherId + "_%" });
+                " WHERE " + COL_MSG_ROOM + " LIKE ? OR " + COL_MSG_ROOM + " LIKE ?",
+                new String[] { "%_" + teacherId, teacherId + "_%" });
 
         if (cursor.moveToFirst()) {
             do {
@@ -1252,7 +1318,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 if (otherUser != null) {
                     return otherUser.getHoTen();
                 }
-            } catch (Exception e) { return roomId; }
+            } catch (Exception e) {
+                return roomId;
+            }
         }
         return roomId;
     }
@@ -1286,8 +1354,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Tìm các phòng có format "STUDENTID_TEACHERID"
         // Ví dụ: Sinh viên ID=1. Tìm các phòng "1_%"
         Cursor cursor = db.rawQuery("SELECT DISTINCT " + COL_MSG_ROOM + " FROM " + TABLE_MESSAGE +
-                        " WHERE " + COL_MSG_ROOM + " LIKE ? OR " + COL_MSG_ROOM + " LIKE ?",
-                new String[]{ studentId + "_%", "%_" + studentId });
+                " WHERE " + COL_MSG_ROOM + " LIKE ? OR " + COL_MSG_ROOM + " LIKE ?",
+                new String[] { studentId + "_%", "%_" + studentId });
 
         if (cursor.moveToFirst()) {
             do {
@@ -1308,7 +1376,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Chapter getChapterById(int chapterId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Chapter chapter = null;
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_CHAPTER + " WHERE " + COL_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_CHAPTER + " WHERE " + COL_CHAPTER_ID + "=?",
+                new String[] { String.valueOf(chapterId) });
         if (cursor.moveToFirst()) {
             chapter = new Chapter(
                     cursor.getInt(0),
@@ -1337,11 +1406,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (chapterId != -1) {
             // B. Thêm Tài liệu PDF
             if (!pdfFile.isEmpty()) {
-                addDocument((int)chapterId, "PDF", pdfFile);
+                addDocument((int) chapterId, "PDF", pdfFile);
             }
             // C. Thêm Tài liệu Video
             if (!videoFile.isEmpty()) {
-                addDocument((int)chapterId, "Video", videoFile);
+                addDocument((int) chapterId, "Video", videoFile);
             }
             // D. Thêm Bài tập tự luận
             if (!assignment.isEmpty()) {
@@ -1361,15 +1430,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // A. Cập nhật tên chương
         android.content.ContentValues cvChapter = new android.content.ContentValues();
         cvChapter.put(COL_CHAPTER_NAME, name);
-        db.update(TABLE_CHAPTER, cvChapter, COL_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
+        db.update(TABLE_CHAPTER, cvChapter, COL_CHAPTER_ID + "=?", new String[] { String.valueOf(chapterId) });
 
         // B. Cập nhật tài liệu (Xóa cũ thêm mới cho nhanh)
-        db.delete(TABLE_DOCUMENT, COL_DOC_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
-        if (!pdfFile.isEmpty()) addDocument(chapterId, "PDF", pdfFile);
-        if (!videoFile.isEmpty()) addDocument(chapterId, "Video", videoFile);
+        db.delete(TABLE_DOCUMENT, COL_DOC_CHAPTER_ID + "=?", new String[] { String.valueOf(chapterId) });
+        if (!pdfFile.isEmpty())
+            addDocument(chapterId, "PDF", pdfFile);
+        if (!videoFile.isEmpty())
+            addDocument(chapterId, "Video", videoFile);
 
         // C. Cập nhật bài tập
-        db.delete(TABLE_ASSIGNMENT, COL_ASS_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
+        db.delete(TABLE_ASSIGNMENT, COL_ASS_CHAPTER_ID + "=?", new String[] { String.valueOf(chapterId) });
         if (!assignment.isEmpty()) {
             android.content.ContentValues cvAss = new android.content.ContentValues();
             cvAss.put(COL_ASS_CHAPTER_ID, chapterId);
@@ -1380,18 +1451,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean deleteChapterFull(int chapterId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_DOCUMENT, COL_DOC_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
-        db.delete(TABLE_QUESTION, COL_Q_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
-        db.delete(TABLE_SCORE, COL_SCORE_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
+        db.delete(TABLE_DOCUMENT, COL_DOC_CHAPTER_ID + "=?", new String[] { String.valueOf(chapterId) });
+        db.delete(TABLE_QUESTION, COL_Q_CHAPTER_ID + "=?", new String[] { String.valueOf(chapterId) });
+        db.delete(TABLE_SCORE, COL_SCORE_CHAPTER_ID + "=?", new String[] { String.valueOf(chapterId) });
 
-        Cursor cursor = db.rawQuery("SELECT " + COL_ASS_ID + " FROM " + TABLE_ASSIGNMENT + " WHERE " + COL_ASS_CHAPTER_ID + "=?",
-                new String[]{String.valueOf(chapterId)});
+        Cursor cursor = db.rawQuery(
+                "SELECT " + COL_ASS_ID + " FROM " + TABLE_ASSIGNMENT + " WHERE " + COL_ASS_CHAPTER_ID + "=?",
+                new String[] { String.valueOf(chapterId) });
         while (cursor.moveToNext()) {
-            db.delete(TABLE_SUBMISSION, COL_SUB_ASS_ID + "=?", new String[]{String.valueOf(cursor.getInt(0))});
+            db.delete(TABLE_SUBMISSION, COL_SUB_ASS_ID + "=?", new String[] { String.valueOf(cursor.getInt(0)) });
         }
         cursor.close();
-        db.delete(TABLE_ASSIGNMENT, COL_ASS_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
-        int rows = db.delete(TABLE_CHAPTER, COL_CHAPTER_ID + "=?", new String[]{String.valueOf(chapterId)});
+        db.delete(TABLE_ASSIGNMENT, COL_ASS_CHAPTER_ID + "=?", new String[] { String.valueOf(chapterId) });
+        int rows = db.delete(TABLE_CHAPTER, COL_CHAPTER_ID + "=?", new String[] { String.valueOf(chapterId) });
         return rows > 0;
     }
 
@@ -1408,7 +1480,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // --- BỔ SUNG: QUẢN LÝ CÂU HỎI TRẮC NGHIỆM ---
 
     // 1. Thêm câu hỏi mới (Lưu đáp án dạng "A", "B", "C", "D")
-    public void addQuestion(int chapterId, String content, String opA, String opB, String opC, String opD, String correctAns) {
+    public void addQuestion(int chapterId, String content, String opA, String opB, String opC, String opD,
+            String correctAns) {
         SQLiteDatabase db = this.getWritableDatabase();
         android.content.ContentValues values = new android.content.ContentValues();
         values.put(COL_Q_CHAPTER_ID, chapterId);
@@ -1424,11 +1497,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // 2. Xóa câu hỏi
     public void deleteQuestion(int questionId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_QUESTION, COL_Q_ID + "=?", new String[]{String.valueOf(questionId)});
+        db.delete(TABLE_QUESTION, COL_Q_ID + "=?", new String[] { String.valueOf(questionId) });
     }
 
     // 3. Cập nhật câu hỏi (Sửa)
-    public void updateQuestion(int questionId, String content, String opA, String opB, String opC, String opD, String correctAns) {
+    public void updateQuestion(int questionId, String content, String opA, String opB, String opC, String opD,
+            String correctAns) {
         SQLiteDatabase db = this.getWritableDatabase();
         android.content.ContentValues values = new android.content.ContentValues();
         values.put(COL_Q_CONTENT, content);
@@ -1439,7 +1513,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COL_Q_CORRECT, correctAns);
 
         // Cập nhật dòng có ID tương ứng
-        db.update(TABLE_QUESTION, values, COL_Q_ID + "=?", new String[]{String.valueOf(questionId)});
+        db.update(TABLE_QUESTION, values, COL_Q_ID + "=?", new String[] { String.valueOf(questionId) });
     }
 
     // ══════════════════════════════════════════════════════

@@ -112,10 +112,14 @@ public class QuestionActivity extends AppCompatActivity {
 
         // Kiểm tra xem câu này người dùng đã chọn đáp án chưa để tích lại
         radioGroup.clearCheck();
-        if (q.getUserAnswer().equals("A")) radioA.setChecked(true);
-        if (q.getUserAnswer().equals("B")) radioB.setChecked(true);
-        if (q.getUserAnswer().equals("C")) radioC.setChecked(true);
-        if (q.getUserAnswer().equals("D")) radioD.setChecked(true);
+        if (q.getUserAnswer().equals("A"))
+            radioA.setChecked(true);
+        if (q.getUserAnswer().equals("B"))
+            radioB.setChecked(true);
+        if (q.getUserAnswer().equals("C"))
+            radioC.setChecked(true);
+        if (q.getUserAnswer().equals("D"))
+            radioD.setChecked(true);
 
         // Ẩn/Hiện nút Next/Prev
         btnPrev.setEnabled(index > 0);
@@ -134,10 +138,14 @@ public class QuestionActivity extends AppCompatActivity {
         Question q = questionList.get(currentQuestionIndex);
         int selectedId = radioGroup.getCheckedRadioButtonId();
 
-        if (selectedId == R.id.radioA) q.setUserAnswer("A");
-        else if (selectedId == R.id.radioB) q.setUserAnswer("B");
-        else if (selectedId == R.id.radioC) q.setUserAnswer("C");
-        else if (selectedId == R.id.radioD) q.setUserAnswer("D");
+        if (selectedId == R.id.radioA)
+            q.setUserAnswer("A");
+        else if (selectedId == R.id.radioB)
+            q.setUserAnswer("B");
+        else if (selectedId == R.id.radioC)
+            q.setUserAnswer("C");
+        else if (selectedId == R.id.radioD)
+            q.setUserAnswer("D");
         // Nếu không chọn thì giữ nguyên
     }
 
@@ -179,7 +187,8 @@ public class QuestionActivity extends AppCompatActivity {
 
     // Tính điểm
     private void calculateScore() {
-        if (timer != null) timer.cancel();
+        if (timer != null)
+            timer.cancel();
 
         int score = 0; // Số câu đúng
         int total = questionList.size();
