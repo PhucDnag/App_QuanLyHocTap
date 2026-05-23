@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.aibot;
+package com.example.androidlearn.ui.aibot;
 
 import android.app.Application;
 import android.os.Handler;
@@ -9,10 +9,12 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.data.GeminiRepository;
-import com.example.a9_btl.model.AiMessage;
-import com.example.a9_btl.model.FlashCard;
+import com.example.androidlearn.data.ChatHistoryManager;
+import com.example.androidlearn.data.FlashCardStorage;
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.data.GeminiRepository;
+import com.example.androidlearn.model.AiMessage;
+import com.example.androidlearn.model.FlashCard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,9 @@ public class AiBotViewModel extends AndroidViewModel {
 
     private final GeminiRepository repository;
     private int streamingMessageIndex = -1;
+    private ChatHistoryManager chatHistoryManager;
+    private FlashCardStorage flashCardStorage;
+    private String currentFlashCardChapter; // Tên chương đang tạo flashcard
 
     // Danh sách messages được quản lý trong ViewModel
     private final List<AiMessage> messages = new ArrayList<>();
@@ -52,6 +57,32 @@ public class AiBotViewModel extends AndroidViewModel {
         repository = new GeminiRepository();
     }
 
+    /**
+     * Khởi tạo và load lịch sử chat từ SharedPreferences.
+     * Gọi từ Activity sau khi có userId.
+     */
+    public void initChatHistory(int userId) {
+        if (chatHistoryManager != null) return; // Đã init rồi
+        chatHistoryManager = new ChatHistoryManager(getApplication(), userId);
+        flashCardStorage = new FlashCardStorage(getApplication(), userId);
+
+        // Chỉ load nếu chưa có message nào (tránh duplicate khi config change)
+        if (messages.isEmpty()) {
+            List<AiMessage> saved = chatHistoryManager.loadMessages();
+            if (!saved.isEmpty()) {
+                messages.addAll(saved);
+                messagesLiveData.setValue(new ArrayList<>(messages));
+            }
+        }
+    }
+
+    /** Lưu lịch sử chat hiện tại */
+    private void saveChatHistory() {
+        if (chatHistoryManager != null) {
+            chatHistoryManager.saveMessages(messages);
+        }
+    }
+
     // ── Getters ────────────────────────────────────────────────────────
     public LiveData<List<AiMessage>> getMessages()       { return messagesLiveData; }
     public LiveData<Boolean>  getIsStreaming()            { return isStreamingLiveData; }
@@ -59,6 +90,7 @@ public class AiBotViewModel extends AndroidViewModel {
     public LiveData<List<FlashCard>> getFlashCards()     { return flashCardsLiveData; }
     public List<AiMessage>    getMessageList()           { return messages; }
     public int getStreamingMessageIndex()                { return streamingMessageIndex; }
+    public FlashCardStorage getFlashCardStorage()        { return flashCardStorage; }
 
     public void setTokenUpdateListener(TokenUpdateListener listener) {
         this.tokenUpdateListener = listener;
@@ -69,6 +101,9 @@ public class AiBotViewModel extends AndroidViewModel {
         cancelStream();
         messages.clear();
         messagesLiveData.setValue(new ArrayList<>(messages));
+        if (chatHistoryManager != null) {
+            chatHistoryManager.clearHistory();
+        }
     }
 
     /** Dừng stream đang chạy */
@@ -88,6 +123,7 @@ public class AiBotViewModel extends AndroidViewModel {
         messages.add(AiMessage.userMessage(userText));
         messages.add(AiMessage.completedBotMessage(botResponse));
         messagesLiveData.setValue(new ArrayList<>(messages));
+        saveChatHistory();
     }
 
     /** Quét tiến độ học và hiển thị kết quả trong chat */
@@ -144,6 +180,7 @@ public class AiBotViewModel extends AndroidViewModel {
      */
     public void generateFlashCards(String chapterName) {
         if (Boolean.TRUE.equals(isStreamingLiveData.getValue())) return;
+        currentFlashCardChapter = chapterName;
 
         String prompt = "Hãy tạo 5 flashcard học tập về chủ đề: " + chapterName + ".\n"
                 + "Định dạng BẮT BUỘC cho MỖI thẻ (giữ đúng tiêu đề, không thêm ký tự khác):\n"
@@ -176,11 +213,28 @@ public class AiBotViewModel extends AndroidViewModel {
             public void onComplete() {
                 mainHandler.post(() -> {
                     isStreamingLiveData.setValue(false);
-                    List<FlashCard> cards = parseFlashCards(fullResponse.toString());
+                    String responseText = fullResponse.toString().trim();
+
+                    if (responseText.isEmpty()) {
+                        // AI trả về rỗng — có thể do rate limit hoặc model không khả dụng
+                        if (!messages.isEmpty()) {
+                            messages.get(messages.size() - 1)
+                                    .appendToken("\n❌ AI không phản hồi. Có thể do giới hạn request miễn phí. Vui lòng thử lại sau vài giây.");
+                            messagesLiveData.setValue(new ArrayList<>(messages));
+                        }
+                        saveChatHistory();
+                        return;
+                    }
+
+                    List<FlashCard> cards = parseFlashCards(responseText);
 
                     if (cards.isEmpty()) {
-                        // Fallback: hiện raw text
-                        addUserAndBotMessage("", "⚠️ Không parse được flashcard. AI trả lời:\n" + fullResponse);
+                        // Có response nhưng parse thất bại — cập nhật message hiện tại
+                        if (!messages.isEmpty()) {
+                            messages.get(messages.size() - 1)
+                                    .appendToken("\n⚠️ Không parse được flashcard. AI trả lời:\n" + responseText);
+                            messagesLiveData.setValue(new ArrayList<>(messages));
+                        }
                     } else {
                         // Update message cuối thành thông báo thành công
                         if (!messages.isEmpty()) {
@@ -189,7 +243,12 @@ public class AiBotViewModel extends AndroidViewModel {
                             messagesLiveData.setValue(new ArrayList<>(messages));
                         }
                         flashCardsLiveData.setValue(cards);
+                        // Lưu flashcard vào SharedPreferences để mở lại sau
+                        if (flashCardStorage != null && currentFlashCardChapter != null) {
+                            flashCardStorage.saveFlashCards(currentFlashCardChapter, cards);
+                        }
                     }
+                    saveChatHistory();
                 });
             }
 
@@ -295,6 +354,7 @@ public class AiBotViewModel extends AndroidViewModel {
                     streamingMessageIndex = -1;
                     messagesLiveData.setValue(new ArrayList<>(messages));
                     isStreamingLiveData.setValue(false);
+                    saveChatHistory();
                     if (tokenUpdateListener != null) tokenUpdateListener.onStreamingFinished();
                 });
             }
@@ -388,6 +448,7 @@ public class AiBotViewModel extends AndroidViewModel {
 
                     messagesLiveData.setValue(new ArrayList<>(messages));
                     isStreamingLiveData.setValue(false);
+                    saveChatHistory();
 
                     if (tokenUpdateListener != null) {
                         tokenUpdateListener.onStreamingFinished();

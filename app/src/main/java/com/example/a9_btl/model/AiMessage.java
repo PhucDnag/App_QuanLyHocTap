@@ -1,4 +1,4 @@
-package com.example.a9_btl.model;
+package com.example.androidlearn.model;
 
 /**
  * Represents a single message in the AI chatbot conversation.
@@ -56,6 +56,16 @@ public class AiMessage {
         msg.content = new StringBuilder(text);
         msg.isStreaming = false;
         msg.timestamp = System.currentTimeMillis();
+        return msg;
+    }
+
+    /** Reconstruct a message from persisted storage */
+    public static AiMessage fromSaved(Role role, String text, long timestamp) {
+        AiMessage msg = new AiMessage();
+        msg.role = role;
+        msg.content = new StringBuilder(text);
+        msg.isStreaming = false;
+        msg.timestamp = timestamp;
         return msg;
     }
 

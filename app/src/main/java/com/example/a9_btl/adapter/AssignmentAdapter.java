@@ -1,4 +1,4 @@
-package com.example.a9_btl.adapter;
+package com.example.androidlearn.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,10 +12,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.model.Chapter;
-import com.example.a9_btl.ui.assignment.AssignmentActivity;
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.model.Chapter;
+import com.example.androidlearn.ui.assignment.AssignmentActivity;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.chat;
+package com.example.androidlearn.ui.chat;
 
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -10,12 +10,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.model.Message;
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.model.Message;
 import java.util.ArrayList;
 import java.util.List;
-import com.example.a9_btl.adapter.ChatAdapter;
+import com.example.androidlearn.adapter.ChatAdapter;
 
 public class ChatActivity extends AppCompatActivity {
 

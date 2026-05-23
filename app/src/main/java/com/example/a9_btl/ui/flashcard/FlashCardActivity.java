@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.flashcard;
+package com.example.androidlearn.ui.flashcard;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
@@ -12,8 +12,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.model.FlashCard;
+import com.example.androidlearn.R;
+import com.example.androidlearn.model.FlashCard;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;

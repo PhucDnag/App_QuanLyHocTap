@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.teacher;
+package com.example.androidlearn.ui.teacher;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,10 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.model.Chapter;
-import com.example.a9_btl.ui.main.MainActivity;
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.model.Chapter;
+import com.example.androidlearn.ui.main.MainActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.io.File;
 import java.io.FileOutputStream;

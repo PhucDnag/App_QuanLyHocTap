@@ -1,4 +1,4 @@
-package com.example.a9_btl.model;
+package com.example.androidlearn.model;
 
 public class User {
     private int maNguoiDung;

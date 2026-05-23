@@ -1,4 +1,4 @@
-package com.example.a9_btl.adapter;
+package com.example.androidlearn.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat; // Thư viện để lấy màu từ resources
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.model.Chapter;
+import com.example.androidlearn.R;
+import com.example.androidlearn.model.Chapter;
 import com.google.android.material.card.MaterialCardView; // Import thẻ Material
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.a9_btl.adapter;
+package com.example.androidlearn.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper;
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper;
 
 import java.util.List;
 

@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "9_BTL"
+rootProject.name = "androidlearn"
 include(":app")

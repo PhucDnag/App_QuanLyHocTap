@@ -1,4 +1,4 @@
-package com.example.a9_btl.adapter; // Hoặc package adapter tùy bạn đặt
+package com.example.androidlearn.adapter; // Hoặc package adapter tùy bạn đặt
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.model.Chapter;
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.model.Chapter;
 import java.util.List;
 
 public class StudentChapterScoreAdapter extends RecyclerView.Adapter<StudentChapterScoreAdapter.ViewHolder> {

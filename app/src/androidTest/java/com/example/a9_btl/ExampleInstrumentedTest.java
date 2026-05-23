@@ -1,4 +1,4 @@
-package com.example.a9_btl;
+package com.example.androidlearn;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.example.a9_btl", appContext.getPackageName());
+        assertEquals("com.example.androidlearn", appContext.getPackageName());
     }
 }

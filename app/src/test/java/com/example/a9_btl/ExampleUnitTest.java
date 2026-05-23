@@ -1,4 +1,4 @@
-package com.example.a9_btl;
+package com.example.androidlearn;
 
 import org.junit.Test;
 

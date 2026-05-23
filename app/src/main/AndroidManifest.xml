@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.androidlearn"> <!-- Thêm dòng này để định nghĩa package gốc -->
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -13,6 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme._9_BTL">
+
         <activity
             android:name=".ui.auth.RegisterActivity"
             android:exported="false" />
@@ -48,7 +50,8 @@
         <activity android:name=".ui.teacher.TeacherAddEditChapterActivity" />
         <activity android:name=".ui.teacher.TeacherCourseListActivity" />
         <activity android:name=".ui.teacher.TeacherQuizManagerActivity" />
-        <activity android:name=".ui.aibot.AiBotActivity"
+        <activity
+            android:name=".ui.aibot.AiBotActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.study.StudyScanActivity" />
         <activity android:name=".ui.flashcard.FlashCardActivity" />

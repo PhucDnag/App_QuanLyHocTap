@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.teacher;
+package com.example.androidlearn.ui.teacher;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,10 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.adapter.TeacherClassAdapter;
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.ui.main.MainActivity;
+import com.example.androidlearn.R;
+import com.example.androidlearn.adapter.TeacherClassAdapter;
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.ui.main.MainActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
@@ -65,7 +65,7 @@ public class TeacherClassListActivity extends AppCompatActivity {
                 }
                 else if (itemId == R.id.nav_profile) {
                     // Tạm thời chuyển về Main (Profile) hoặc làm trang Profile riêng cho GV
-                    Intent intent = new Intent(TeacherClassListActivity.this, com.example.a9_btl.ui.main.MainActivity.class);
+                    Intent intent = new Intent(TeacherClassListActivity.this, com.example.androidlearn.ui.main.MainActivity.class);
                     intent.putExtra("NAVIGATE_TO", "PROFILE");
                     startActivity(intent);
                     finish();

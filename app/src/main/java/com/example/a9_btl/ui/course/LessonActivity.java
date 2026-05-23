@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.course;
+package com.example.androidlearn.ui.course;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,12 +8,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.model.Chapter;
-import com.example.a9_btl.ui.main.MainActivity;
-import com.example.a9_btl.ui.quiz.QuizActivity;
-// import com.example.a9_btl.ui.course.VideoPlayerActivity; // Chung package không cần import
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.model.Chapter;
+import com.example.androidlearn.ui.main.MainActivity;
+import com.example.androidlearn.ui.quiz.QuizActivity;
+// import com.example.androidlearn.ui.course.VideoPlayerActivity; // Chung package không cần import
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.rajat.pdfviewer.PdfViewerActivity;
@@ -136,7 +136,7 @@ public class LessonActivity extends AppCompatActivity {
 
         // Assignment
         cardAssignment.setOnClickListener(v -> {
-            Intent intent = new Intent(LessonActivity.this, com.example.a9_btl.ui.assignment.AssignmentListActivity.class);
+            Intent intent = new Intent(LessonActivity.this, com.example.androidlearn.ui.assignment.AssignmentListActivity.class);
             startActivity(intent);
         });
     }

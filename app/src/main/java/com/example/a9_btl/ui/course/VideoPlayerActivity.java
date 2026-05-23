@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.course;
+package com.example.androidlearn.ui.course;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,8 +7,8 @@ import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper;
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper;
 import java.io.File;
 
 public class VideoPlayerActivity extends AppCompatActivity {

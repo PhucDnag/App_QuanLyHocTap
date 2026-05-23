@@ -1,4 +1,4 @@
-package com.example.a9_btl.adapter;
+package com.example.androidlearn.adapter;
 
 public class MessageAdapter {
 }

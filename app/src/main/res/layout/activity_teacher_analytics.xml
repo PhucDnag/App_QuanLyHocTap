@@ -105,7 +105,7 @@
                         android:text="Phổ điểm của lớp"
                         android:textColor="#1976D2"
                         android:textStyle="bold" />
-                    <com.example.a9_btl.utils.SimpleChartView
+                    <com.example.androidlearn.utils.SimpleChartView
                         android:id="@+id/chartScoreDistribution"
                         android:layout_width="match_parent"
                         android:layout_height="230dp"

@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.aibot;
+package com.example.androidlearn.ui.aibot;
 
 import android.content.Intent;
 
@@ -16,16 +16,18 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.model.AiMessage;
-import com.example.a9_btl.model.FlashCard;
-import com.example.a9_btl.ui.flashcard.FlashCardActivity;
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.data.FlashCardStorage;
+import com.example.androidlearn.model.AiMessage;
+import com.example.androidlearn.model.FlashCard;
+import com.example.androidlearn.ui.flashcard.FlashCardActivity;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AiBotActivity extends AppCompatActivity
         implements AiBotViewModel.TokenUpdateListener {
@@ -89,12 +91,19 @@ public class AiBotActivity extends AppCompatActivity
         recyclerView.setItemAnimator(null); // Tắt animation tránh flicker
 
         adapter = new AiBotAdapter(new ArrayList<>());
+        // Đăng ký callback mở lại flashcard từ message bot
+        adapter.setFlashCardClickListener(chapterName -> openSavedFlashCards());
         recyclerView.setAdapter(adapter);
     }
 
     private void setupViewModel() {
         viewModel = new ViewModelProvider(this).get(AiBotViewModel.class);
         viewModel.setTokenUpdateListener(this); // Đăng ký callback
+
+        // Load lịch sử chat từ SharedPreferences
+        int userId = getSharedPreferences("UserSession", MODE_PRIVATE)
+                .getInt("KEY_USER_ID", 1);
+        viewModel.initChatHistory(userId);
 
         // Full list update — thêm/xoá message
         viewModel.getMessages().observe(this, messages -> {
@@ -226,21 +235,89 @@ public class AiBotActivity extends AppCompatActivity
     /** Hiện dialog chọn chương để tạo flashcard */
     private void showChapterPickerForFlashCard() {
         DatabaseHelper db = new DatabaseHelper(this);
-        java.util.List<com.example.a9_btl.model.Chapter> chapters = db.getAllChapters();
+        java.util.List<com.example.androidlearn.model.Chapter> chapters = db.getAllChapters();
+        FlashCardStorage storage = viewModel.getFlashCardStorage();
 
-        String[] chapterNames = new String[chapters.size()];
+        String[] labels = new String[chapters.size()];
         for (int i = 0; i < chapters.size(); i++) {
-            chapterNames[i] = chapters.get(i).getTenChuong();
+            String name = chapters.get(i).getTenChuong();
+            boolean hasSaved = storage != null && storage.hasFlashCards(name);
+            labels[i] = hasSaved ? name + " ✅" : name;
         }
 
         new AlertDialog.Builder(this)
-                .setTitle("🃏 Chọn chương để tạo Flashcard")
-                .setItems(chapterNames, (dialog, which) -> {
-                    String selectedChapter = chapterNames[which];
-                    viewModel.generateFlashCards(selectedChapter);
+                .setTitle("🃏 Chọn chương")
+                .setItems(labels, (dialog, which) -> {
+                    String selectedChapter = chapters.get(which).getTenChuong();
+                    boolean hasSaved = storage != null && storage.hasFlashCards(selectedChapter);
+
+                    if (hasSaved) {
+                        // Chương đã có flashcard → hỏi tạo mới hay mở lại
+                        new AlertDialog.Builder(this)
+                                .setTitle("🃏 " + selectedChapter)
+                                .setMessage("Chương này đã có flashcard được lưu. Bạn muốn mở lại hay tạo mới?")
+                                .setPositiveButton("📂 Mở lại", (d, w) -> {
+                                    openSavedFlashCards(selectedChapter);
+                                })
+                                .setNegativeButton("🔄 Tạo mới", (d, w) -> {
+                                    viewModel.generateFlashCards(selectedChapter);
+                                })
+                                .setNeutralButton("Hủy", null)
+                                .show();
+                    } else {
+                        viewModel.generateFlashCards(selectedChapter);
+                    }
                 })
                 .setNegativeButton("Hủy", null)
                 .show();
+    }
+
+    /** Mở flashcard đã lưu của chương cuối cùng được tạo */
+    private void openSavedFlashCards() {
+        FlashCardStorage storage = viewModel.getFlashCardStorage();
+        if (storage == null) return;
+
+        List<String> savedChapters = storage.getSavedChapterNames();
+        if (savedChapters.isEmpty()) {
+            Toast.makeText(this, "Chưa có flashcard nào được lưu", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (savedChapters.size() == 1) {
+            openSavedFlashCards(savedChapters.get(0));
+        } else {
+            // Nhiều chương → hiện dialog chọn
+            String[] labels = savedChapters.toArray(new String[0]);
+            new AlertDialog.Builder(this)
+                    .setTitle("🃏 Chọn flashcard để mở")
+                    .setItems(labels, (dialog, which) -> openSavedFlashCards(savedChapters.get(which)))
+                    .setNegativeButton("Hủy", null)
+                    .show();
+        }
+    }
+
+    /** Mở flashcard đã lưu của chương cụ thể */
+    private void openSavedFlashCards(String chapterName) {
+        FlashCardStorage storage = viewModel.getFlashCardStorage();
+        if (storage == null) return;
+
+        List<FlashCard> cards = storage.loadFlashCards(chapterName);
+        if (cards.isEmpty()) {
+            Toast.makeText(this, "Không tìm thấy flashcard đã lưu", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ArrayList<String> fronts = new ArrayList<>();
+        ArrayList<String> backs = new ArrayList<>();
+        for (FlashCard c : cards) {
+            fronts.add(c.getFront());
+            backs.add(c.getBack());
+        }
+        Intent intent = new Intent(this, FlashCardActivity.class);
+        intent.putStringArrayListExtra(FlashCardActivity.EXTRA_FRONTS, fronts);
+        intent.putStringArrayListExtra(FlashCardActivity.EXTRA_BACKS, backs);
+        intent.putExtra(FlashCardActivity.EXTRA_CHAPTER_NAME, chapterName);
+        startActivity(intent);
     }
 
     /** Hiện dialog danh sách bài đã nộp để AI chấm */

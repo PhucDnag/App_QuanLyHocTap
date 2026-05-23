@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.teacher;
+package com.example.androidlearn.ui.teacher;
 
 import android.os.Bundle;
 import android.view.View;
@@ -11,9 +11,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.utils.SimpleChartView;
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.utils.SimpleChartView;
 
 import java.util.ArrayList;
 import java.util.List;

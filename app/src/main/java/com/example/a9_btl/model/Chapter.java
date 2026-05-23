@@ -1,4 +1,4 @@
-package com.example.a9_btl.model;
+package com.example.androidlearn.model;
 
 public class Chapter {
     // 1. Các trường ánh xạ đúng với bảng ChuongHoc trong CSDL

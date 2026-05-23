@@ -1,4 +1,4 @@
-package com.example.a9_btl.model;
+package com.example.androidlearn.model;
 
 public class Question {
     // Thêm trường ID (để phục vụ việc Xóa câu hỏi)

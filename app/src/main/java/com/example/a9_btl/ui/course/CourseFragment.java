@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.course;
+package com.example.androidlearn.ui.course;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,10 +16,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.adapter.ChapterAdapter; // Hoặc CourseAdapter nếu bạn đã đổi tên
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.model.Chapter;
+import com.example.androidlearn.R;
+import com.example.androidlearn.adapter.ChapterAdapter; // Hoặc CourseAdapter nếu bạn đã đổi tên
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.model.Chapter;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;

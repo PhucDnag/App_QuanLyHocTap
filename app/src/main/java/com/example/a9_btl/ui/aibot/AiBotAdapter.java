@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.aibot;
+package com.example.androidlearn.ui.aibot;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -12,8 +12,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.model.AiMessage;
+import com.example.androidlearn.R;
+import com.example.androidlearn.model.AiMessage;
+
+import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
 
@@ -37,6 +39,12 @@ public class AiBotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final String CURSOR = " ▌";
     private static final long CURSOR_BLINK_INTERVAL_MS = 500;
 
+    // ── Callback để mở flashcard đã lưu ─────────────────────────────
+    public interface OnFlashCardClickListener {
+        void onOpenFlashCard(String chapterName);
+    }
+    private OnFlashCardClickListener flashCardClickListener;
+
     private List<AiMessage> messages;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
@@ -47,6 +55,10 @@ public class AiBotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public AiBotAdapter(List<AiMessage> messages) {
         this.messages = messages;
+    }
+
+    public void setFlashCardClickListener(OnFlashCardClickListener listener) {
+        this.flashCardClickListener = listener;
     }
 
     // ── Adapter Lifecycle ──────────────────────────────────────────────
@@ -127,7 +139,7 @@ public class AiBotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ((UserViewHolder) holder).bind(msg);
         } else if (holder instanceof BotViewHolder) {
             boolean isThisStreaming = (position == streamingIndex) && msg.isStreaming();
-            ((BotViewHolder) holder).bind(msg, isThisStreaming, cursorVisible);
+            ((BotViewHolder) holder).bind(msg, isThisStreaming, cursorVisible, flashCardClickListener);
         }
         // TypingViewHolder — animation tự chạy qua XML animator, không cần bind
     }
@@ -156,19 +168,39 @@ public class AiBotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     /** ViewHolder cho tin nhắn của bot (căn trái, hỗ trợ streaming cursor) */
     static class BotViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvContent;
+        private final MaterialButton btnOpenFlashcard;
 
         BotViewHolder(@NonNull View itemView) {
             super(itemView);
             tvContent = itemView.findViewById(R.id.tvBotContent);
-            // ivBotAvatar là CardView trong XML — không cần reference vì chỉ hiển thị tĩnh
+            btnOpenFlashcard = itemView.findViewById(R.id.btnOpenFlashcard);
         }
 
-        void bind(AiMessage msg, boolean isStreaming, boolean cursorVisible) {
+        void bind(AiMessage msg, boolean isStreaming, boolean cursorVisible,
+                  OnFlashCardClickListener listener) {
             String text = msg.getContent();
             if (isStreaming && cursorVisible) {
                 tvContent.setText(text + CURSOR);
             } else {
                 tvContent.setText(text);
+            }
+
+            // Hiện nút "Mở lại Flashcard" nếu message chứa kết quả tạo flashcard thành công
+            if (btnOpenFlashcard != null) {
+                if (!isStreaming && text.contains("✅ Đã tạo xong") && text.contains("thẻ")) {
+                    btnOpenFlashcard.setVisibility(View.VISIBLE);
+
+                    // Trích xuất tên chương từ message USER phía trước
+                    btnOpenFlashcard.setOnClickListener(v -> {
+                        if (listener != null) {
+                            // Trích chapterName từ nội dung bot message
+                            // Bot message trước đó có dạng: "⏳ Đang tạo flashcard, vui lòng chờ...\n✅ Đã tạo xong 5 thẻ!"
+                            listener.onOpenFlashCard(null); // Activity sẽ xử lý logic tìm chapter
+                        }
+                    });
+                } else {
+                    btnOpenFlashcard.setVisibility(View.GONE);
+                }
             }
         }
     }

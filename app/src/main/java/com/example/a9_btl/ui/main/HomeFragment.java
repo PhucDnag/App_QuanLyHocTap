@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.main;
+package com.example.androidlearn.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,16 +12,16 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.ui.aibot.AiBotActivity;
-import com.example.a9_btl.ui.assignment.AssignmentActivity;
-import com.example.a9_btl.ui.assignment.AssignmentListActivity;
-import com.example.a9_btl.ui.course.CourseActivity;
-import com.example.a9_btl.ui.course.LessonActivity; // Ví dụ màn hình khóa học
-import com.example.a9_btl.ui.quiz.QuizActivity;
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.ui.aibot.AiBotActivity;
+import com.example.androidlearn.ui.assignment.AssignmentActivity;
+import com.example.androidlearn.ui.assignment.AssignmentListActivity;
+import com.example.androidlearn.ui.course.CourseActivity;
+import com.example.androidlearn.ui.course.LessonActivity; // Ví dụ màn hình khóa học
+import com.example.androidlearn.ui.quiz.QuizActivity;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-// import com.example.a9_btl.ui.quiz.QuizSelectorActivity; // Import màn hình Quiz của bạn
+// import com.example.androidlearn.ui.quiz.QuizSelectorActivity; // Import màn hình Quiz của bạn
 
 public class HomeFragment extends Fragment {
 
@@ -103,7 +103,7 @@ public class HomeFragment extends Fragment {
 
         // 4. Cập nhật Tên Chương Hiện Tại
         if (tvCurrentChapter != null) {
-            com.example.a9_btl.model.Chapter current = db.getCurrentChapter(myId);
+            com.example.androidlearn.model.Chapter current = db.getCurrentChapter(myId);
             if (current != null) {
                 tvCurrentChapter.setText(current.getTenChuong());
             } else {

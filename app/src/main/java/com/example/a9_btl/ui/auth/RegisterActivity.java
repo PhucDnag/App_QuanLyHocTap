@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.auth;
+package com.example.androidlearn.ui.auth;
 
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -9,8 +9,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper;
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class RegisterActivity extends AppCompatActivity {

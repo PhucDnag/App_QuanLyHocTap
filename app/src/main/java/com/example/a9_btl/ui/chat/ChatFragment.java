@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.chat;
+package com.example.androidlearn.ui.chat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,8 +18,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper;
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;

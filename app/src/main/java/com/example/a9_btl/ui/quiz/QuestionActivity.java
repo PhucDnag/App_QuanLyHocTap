@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.quiz;
+package com.example.androidlearn.ui.quiz;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -12,9 +12,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.model.Question;
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.model.Question;
 
 import java.util.List;
 import java.util.Locale;

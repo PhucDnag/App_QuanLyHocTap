@@ -1,4 +1,4 @@
-package com.example.a9_btl.model;
+package com.example.androidlearn.model;
 
 /**
  * Represents a single choice for a multiple-choice question.

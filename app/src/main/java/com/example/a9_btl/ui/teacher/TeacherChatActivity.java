@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.teacher;
+package com.example.androidlearn.ui.teacher;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,10 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.ui.chat.ChatActivity;
-import com.example.a9_btl.ui.main.MainActivity;
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.ui.chat.ChatActivity;
+import com.example.androidlearn.ui.main.MainActivity;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

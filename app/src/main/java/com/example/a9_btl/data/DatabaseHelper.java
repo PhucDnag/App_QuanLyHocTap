@@ -1,4 +1,4 @@
-package com.example.a9_btl.data;
+package com.example.androidlearn.data;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,9 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.a9_btl.model.Chapter; // Import Model Chapter
-import com.example.a9_btl.model.Question; // Import Model Question
-import com.example.a9_btl.model.User; // Import Model User
+import com.example.androidlearn.model.Chapter; // Import Model Chapter
+import com.example.androidlearn.model.Question; // Import Model Question
+import com.example.androidlearn.model.User; // Import Model User
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,7 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    private static final String DATABASE_NAME = "KienTrucMayTinh.db";
+    private static final String DATABASE_NAME = "AndroidLearn.db";
     private static final int DATABASE_VERSION = 3;
 
     // --- 1. ĐỊNH NGHĨA CÁC HẰNG SỐ (CONSTANTS) ---

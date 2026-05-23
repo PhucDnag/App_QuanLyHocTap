@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.quiz;
+package com.example.androidlearn.ui.quiz;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,15 +11,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.adapter.QuizAdapter;
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.model.Chapter;
-import com.example.a9_btl.ui.assignment.AssignmentActivity;
-import com.example.a9_btl.ui.chat.ChatFragment;
-import com.example.a9_btl.ui.main.HomeFragment;
-import com.example.a9_btl.ui.main.MainActivity;
-import com.example.a9_btl.ui.profile.ProfileFragment;
+import com.example.androidlearn.R;
+import com.example.androidlearn.adapter.QuizAdapter;
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.model.Chapter;
+import com.example.androidlearn.ui.assignment.AssignmentActivity;
+import com.example.androidlearn.ui.chat.ChatFragment;
+import com.example.androidlearn.ui.main.HomeFragment;
+import com.example.androidlearn.ui.main.MainActivity;
+import com.example.androidlearn.ui.profile.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 

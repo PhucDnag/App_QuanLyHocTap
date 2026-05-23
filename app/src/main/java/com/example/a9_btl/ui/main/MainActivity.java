@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.main;
+package com.example.androidlearn.ui.main;
 
 
 import android.content.Intent;
@@ -10,10 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment; // QUAN TRỌNG: Phải dùng thư viện này
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.ui.chat.ChatFragment;
-import com.example.a9_btl.ui.profile.ProfileFragment;
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.ui.chat.ChatFragment;
+import com.example.androidlearn.ui.profile.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -55,12 +55,12 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences prefs = getSharedPreferences("UserSession", MODE_PRIVATE);
                 int userId = prefs.getInt("KEY_USER_ID", -1);
                 DatabaseHelper db = new DatabaseHelper(this);
-                com.example.a9_btl.model.User user = db.getUserById(userId);
+                com.example.androidlearn.model.User user = db.getUserById(userId);
 
                 // 2. Kiểm tra quyền hạn (2 = Giáo viên)
                 if (user != null && user.getQuyenHan() == 2) {
                     // ==> NẾU LÀ GIÁO VIÊN -> CHUYỂN VỀ TEACHER MAIN ACTIVITY
-                    Intent intent = new Intent(MainActivity.this, com.example.a9_btl.ui.teacher.TeacherMainActivity.class);
+                    Intent intent = new Intent(MainActivity.this, com.example.androidlearn.ui.teacher.TeacherMainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // Tạm thời mình để code logic cơ bản của SV ở đây:
                     getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragmentContainer, new com.example.a9_btl.ui.main.HomeFragment()) // Đảm bảo ID và tên Fragment đúng
+                            .replace(R.id.fragmentContainer, new com.example.androidlearn.ui.main.HomeFragment()) // Đảm bảo ID và tên Fragment đúng
                             .commit();
                     return true;
                 }

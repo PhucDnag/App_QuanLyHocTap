@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.teacher;
+package com.example.androidlearn.ui.teacher;
 
 import android.app.Dialog;
 import android.os.AsyncTask;
@@ -17,9 +17,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.model.Question;
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.model.Question;
 import java.util.List;
 
 public class TeacherQuizManagerActivity extends AppCompatActivity {

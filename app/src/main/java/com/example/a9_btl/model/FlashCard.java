@@ -1,4 +1,4 @@
-package com.example.a9_btl.model;
+package com.example.androidlearn.model;
 
 /** Model flashcard: mặt trước (câu hỏi) và mặt sau (đáp án) */
 public class FlashCard {

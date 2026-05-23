@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.profile;
+package com.example.androidlearn.ui.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,9 +6,9 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.ui.teacher.TeacherChatActivity;
-import com.example.a9_btl.ui.teacher.TeacherMainActivity;
+import com.example.androidlearn.R;
+import com.example.androidlearn.ui.teacher.TeacherChatActivity;
+import com.example.androidlearn.ui.teacher.TeacherMainActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ProfileActivity extends AppCompatActivity {

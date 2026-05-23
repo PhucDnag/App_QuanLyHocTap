@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.auth;
+package com.example.androidlearn.ui.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,11 +7,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper; // Import DB
-import com.example.a9_btl.model.User;         // Import Model
-import com.example.a9_btl.ui.main.MainActivity;
-import com.example.a9_btl.ui.teacher.TeacherMainActivity; // <--- NHỚ IMPORT MÀN HÌNH GIÁO VIÊN
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper; // Import DB
+import com.example.androidlearn.model.User;         // Import Model
+import com.example.androidlearn.ui.main.MainActivity;
+import com.example.androidlearn.ui.teacher.TeacherMainActivity; // <--- NHỚ IMPORT MÀN HÌNH GIÁO VIÊN
 import com.google.android.material.textfield.TextInputEditText;
 
 public class LoginActivity extends AppCompatActivity {

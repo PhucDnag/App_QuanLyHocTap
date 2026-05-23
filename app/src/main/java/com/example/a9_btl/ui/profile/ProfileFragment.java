@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.profile;
+package com.example.androidlearn.ui.profile;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,10 +23,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.model.User;
-import com.example.a9_btl.ui.auth.LoginActivity;
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.model.User;
+import com.example.androidlearn.ui.auth.LoginActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 

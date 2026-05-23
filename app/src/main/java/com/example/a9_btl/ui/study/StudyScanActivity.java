@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.study;
+package com.example.androidlearn.ui.study;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,9 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.data.SessionManager;
+import com.example.androidlearn.R;
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.data.SessionManager;
 
 import java.util.List;
 

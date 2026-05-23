@@ -1,4 +1,4 @@
-package com.example.a9_btl.ui.course;
+package com.example.androidlearn.ui.course;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,12 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.a9_btl.R;
-import com.example.a9_btl.adapter.CourseAdapter;
-import com.example.a9_btl.data.DatabaseHelper;
-import com.example.a9_btl.model.Chapter;
-import com.example.a9_btl.ui.assignment.AssignmentActivity;
-import com.example.a9_btl.ui.main.MainActivity; // Import MainActivity
+import com.example.androidlearn.R;
+import com.example.androidlearn.adapter.CourseAdapter;
+import com.example.androidlearn.data.DatabaseHelper;
+import com.example.androidlearn.model.Chapter;
+import com.example.androidlearn.ui.assignment.AssignmentActivity;
+import com.example.androidlearn.ui.main.MainActivity; // Import MainActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
