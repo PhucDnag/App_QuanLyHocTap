@@ -1,6 +1,7 @@
 package com.example.a9_btl.ui.teacher;
 
 import android.app.Dialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,11 @@ public class TeacherQuizManagerActivity extends AppCompatActivity {
 
         db = new DatabaseHelper(this);
         chapterId = getIntent().getIntExtra("CHAPTER_ID", -1);
+        if (chapterId == -1) {
+            Toast.makeText(this, "Không tìm thấy chương học", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
         rcv = findViewById(R.id.rcvQuestions);
         btnAdd = findViewById(R.id.btnAddQuestion);
@@ -102,21 +108,28 @@ public class TeacherQuizManagerActivity extends AppCompatActivity {
             else if (selectedId == R.id.rbC) correctAns = "C";
             else if (selectedId == R.id.rbD) correctAns = "D";
 
-            if (content.isEmpty() || a.isEmpty() || b.isEmpty() || correctAns.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập đủ thông tin!", Toast.LENGTH_SHORT).show();
+                if (content.isEmpty() || a.isEmpty() || b.isEmpty() || c.isEmpty() || d.isEmpty() || correctAns.isEmpty()) {
+                Toast.makeText(this, "Vui lòng nhập đủ nội dung, 4 đáp án và chọn đáp án đúng!", Toast.LENGTH_SHORT).show();
             } else {
-                if (questionToEdit == null) {
-                    // --- THÊM MỚI ---
-                    db.addQuestion(chapterId, content, a, b, c, d, correctAns);
-                    Toast.makeText(this, "Đã thêm!", Toast.LENGTH_SHORT).show();
-                } else {
-                    // --- CẬP NHẬT (SỬA) ---
-                    db.updateQuestion(questionToEdit.getMaCauHoi(), content, a, b, c, d, correctAns);
-                    Toast.makeText(this, "Đã cập nhật!", Toast.LENGTH_SHORT).show();
-                }
+                final String finalCorrectAns = correctAns;
+                btnSave.setEnabled(false);
+                AsyncTask.execute(() -> {
+                    if (questionToEdit == null) {
+                        // --- THÊM MỚI ---
+                        db.addQuestion(chapterId, content, a, b, c, d, finalCorrectAns);
+                    } else {
+                        // --- CẬP NHẬT (SỬA) ---
+                        db.updateQuestion(questionToEdit.getMaCauHoi(), content, a, b, c, d, finalCorrectAns);
+                    }
 
-                loadQuestions(); // Load lại danh sách
-                dialog.dismiss();
+                    runOnUiThread(() -> {
+                        if (!isFinishing() && !isDestroyed()) {
+                            loadQuestions(); // Load lại danh sách
+                            dialog.dismiss();
+                            Toast.makeText(this, questionToEdit == null ? "Đã thêm!" : "Đã cập nhật!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                });
             }
         });
 

@@ -2,11 +2,9 @@ package com.example.a9_btl.ui.course;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -18,7 +16,6 @@ import com.example.a9_btl.ui.quiz.QuizActivity;
 // import com.example.a9_btl.ui.course.VideoPlayerActivity; // Chung package không cần import
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.navigation.NavigationBarView;
 import com.rajat.pdfviewer.PdfViewerActivity;
 import com.rajat.pdfviewer.util.saveTo;
 
@@ -67,32 +64,44 @@ public class LessonActivity extends AppCompatActivity {
         cardPdf.setOnClickListener(v -> {
             String pdfFileName = dbHelper.getPdfFileName(currentChapterId);
 
-            if (pdfFileName != null && !pdfFileName.isEmpty()) {
-                // 1. Kiểm tra file trong bộ nhớ máy (File mới upload)
-                File fileInStorage = new File(getFilesDir(), pdfFileName);
+            if (pdfFileName == null || pdfFileName.isEmpty()) {
+                Toast.makeText(this, "Chưa có file PDF cho chương này", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                String pathToSend;
-                if (fileInStorage.exists()) {
-                    // Nếu có trong máy -> Dùng đường dẫn tuyệt đối
-                    pathToSend = fileInStorage.getAbsolutePath();
-                } else {
-                    // Nếu không -> Dùng tên file (Để thư viện tự tìm trong Assets)
-                    pathToSend = pdfFileName;
-                }
+            // 1. Kiểm tra file trong bộ nhớ máy (File mới upload)
+            File fileInStorage = new File(getFilesDir(), pdfFileName);
 
-                // Mở trình đọc PDF
+            if (fileInStorage.exists() && fileInStorage.length() > 0) {
+                // File do giảng viên chọn nằm trong internal storage của app.
+                // Truyền absolute path để thư viện đọc đúng file local đã copy.
                 startActivity(
                         PdfViewerActivity.Companion.launchPdfFromPath(
                                 LessonActivity.this,
-                                pathToSend,
+                                fileInStorage.getAbsolutePath(),
+                                "Tài liệu " + currentChapterName,
+                                saveTo.DOWNLOADS,
+                                false
+                        )
+                );
+                return;
+            }
+
+            if (isPdfInAssets(pdfFileName)) {
+                // File PDF mẫu trong assets: thư viện hỗ trợ đọc theo tên asset.
+                startActivity(
+                        PdfViewerActivity.Companion.launchPdfFromPath(
+                                LessonActivity.this,
+                                pdfFileName,
                                 "Tài liệu " + currentChapterName,
                                 saveTo.ASK_EVERYTIME,
                                 true
                         )
                 );
-            } else {
-                Toast.makeText(this, "Chưa có file PDF cho chương này", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            Toast.makeText(this, "Không tìm thấy file PDF: " + pdfFileName + ". Vui lòng yêu cầu giảng viên chọn lại file PDF.", Toast.LENGTH_LONG).show();
         });
 
         // Video
@@ -124,6 +133,20 @@ public class LessonActivity extends AppCompatActivity {
             Intent intent = new Intent(LessonActivity.this, com.example.a9_btl.ui.assignment.AssignmentListActivity.class);
             startActivity(intent);
         });
+    }
+
+    private boolean isPdfInAssets(String pdfFileName) {
+        try {
+            String[] assetFiles = getAssets().list("");
+            if (assetFiles == null) return false;
+            for (String assetFile : assetFiles) {
+                if (assetFile.equals(pdfFileName)) {
+                    return true;
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return false;
     }
 
     @Override
