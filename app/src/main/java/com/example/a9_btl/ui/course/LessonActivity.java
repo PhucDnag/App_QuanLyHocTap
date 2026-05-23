@@ -69,6 +69,9 @@ public class LessonActivity extends AppCompatActivity {
                 return;
             }
 
+            // Ghi nhận trạng thái đã xem PDF
+            dbHelper.saveDocProgress(getUserId(), currentChapterId, "PDF", 1);
+
             // 1. Kiểm tra file trong bộ nhớ máy (File mới upload)
             File fileInStorage = new File(getFilesDir(), pdfFileName);
 
@@ -114,6 +117,9 @@ public class LessonActivity extends AppCompatActivity {
                 return; // Dừng lại, không mở màn hình kia
             }
 
+            // Ghi nhận trạng thái đã xem Video
+            dbHelper.saveDocProgress(getUserId(), currentChapterId, "Video", 1);
+
             // 2. Nếu có thì mới mở
             Intent intent = new Intent(LessonActivity.this, VideoPlayerActivity.class);
             intent.putExtra("CHAPTER_NAME", currentChapterName);
@@ -155,10 +161,14 @@ public class LessonActivity extends AppCompatActivity {
         updateHeaderProgress();
     }
 
+    private int getUserId() {
+        android.content.SharedPreferences prefs = getSharedPreferences("UserSession", MODE_PRIVATE);
+        return prefs.getInt("KEY_USER_ID", 1);
+    }
+
     private void updateHeaderProgress() {
         if (tvCurrentChapter == null) return;
-        android.content.SharedPreferences prefs = getSharedPreferences("UserSession", MODE_PRIVATE);
-        int myId = prefs.getInt("KEY_USER_ID", 1);
+        int myId = getUserId();
         Chapter current = dbHelper.getCurrentChapter(myId);
         if (current != null) {
             tvCurrentChapter.setText(current.getTenChuong());

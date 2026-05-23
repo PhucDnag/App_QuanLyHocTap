@@ -30,6 +30,12 @@ public class VideoPlayerActivity extends AppCompatActivity {
         // Nút Back
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
+        // Tối ưu hóa ngăn chặn log "Empty SMPTE 2094-40 data" trên các máy Xiaomi/HDR
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            getWindow().setColorMode(android.content.pm.ActivityInfo.COLOR_MODE_DEFAULT);
+        }
+        videoView.getHolder().setFormat(android.graphics.PixelFormat.RGBA_8888);
+
         // 1. Nhận ID chương
         if (getIntent().hasExtra("CHAPTER_ID")) {
             currentChapterId = getIntent().getIntExtra("CHAPTER_ID", 1);

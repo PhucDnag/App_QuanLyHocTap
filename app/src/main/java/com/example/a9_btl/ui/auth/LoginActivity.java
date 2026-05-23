@@ -16,28 +16,40 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class LoginActivity extends AppCompatActivity {
 
+    // ── Chuẩn hóa key — dùng nhất quán trong toàn app ─────────────────
+    public static final String PREF_NAME    = "UserSession";
+    public static final String KEY_USER_ID  = "KEY_USER_ID";
+    public static final String KEY_USER_ROLE = "KEY_USER_ROLE";
+
     private TextInputEditText edtUsername;
     private TextInputEditText edtPassword;
     private Button btnLogin;
     private TextView tvRegister;
 
-    // Khai báo DatabaseHelper
     private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
-        // Khởi tạo DB object nhẹ, còn việc tạo/mở database sẽ chạy nền khi đăng nhập
-        // để tránh treo giao diện/emulator yếu báo "isn't responding".
+        // ── AUTO-LOGIN: Nếu đã có session hợp lệ → bỏ qua Login ──
+        android.content.SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        int savedUserId = prefs.getInt(KEY_USER_ID, -1);
+        int savedRole   = prefs.getInt(KEY_USER_ROLE, -1);
+
+        if (savedUserId != -1) {
+            // Đã đăng nhập trước → chuyển thẳng vào app
+            navigateToMain(savedRole);
+            return; // Không inflate layout Login
+        }
+
+        setContentView(R.layout.activity_login);
         databaseHelper = new DatabaseHelper(this);
 
-        // Ánh xạ
         edtUsername = findViewById(R.id.edtUsername);
         edtPassword = findViewById(R.id.edtPassword);
-        btnLogin = findViewById(R.id.btnLogin);
-        tvRegister = findViewById(R.id.tvRegister);
+        btnLogin    = findViewById(R.id.btnLogin);
+        tvRegister  = findViewById(R.id.tvRegister);
 
         btnLogin.setOnClickListener(v -> handleLogin());
         tvRegister.setOnClickListener(v -> {
@@ -84,27 +96,28 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginSuccess(User user) {
-        // 1. Đăng nhập thành công -> LƯU ID VÀO BỘ NHỚ
-        android.content.SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
-        android.content.SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("KEY_USER_ID", user.getMaNguoiDung()); // Lưu ID
-        editor.putInt("KEY_USER_ROLE", user.getQuyenHan());  // Lưu thêm Quyền (để dùng sau này nếu cần)
-        editor.apply(); // Xác nhận lưu
+        // 1. Lưu session vào SharedPreferences (dùng đúng key chuẩn)
+        android.content.SharedPreferences.Editor editor =
+                getSharedPreferences(PREF_NAME, MODE_PRIVATE).edit();
+        editor.putInt(KEY_USER_ID,   user.getMaNguoiDung());
+        editor.putInt(KEY_USER_ROLE, user.getQuyenHan());
+        editor.apply();
 
-        // 2. PHÂN QUYỀN CHUYỂN MÀN HÌNH
+        // 2. Phân quyền chuyển màn hình
         if (user.getQuyenHan() == 2) {
-            // --- LÀ GIÁO VIÊN ---
             Toast.makeText(this, "Xin chào Giảng viên: " + user.getHoTen(), Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(LoginActivity.this, TeacherMainActivity.class);
-            startActivity(intent);
         } else {
-            // --- LÀ SINH VIÊN ---
             Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
         }
+        navigateToMain(user.getQuyenHan());
+        finish();
+    }
 
-        // Đóng màn hình Login để không quay lại được bằng nút Back
+    private void navigateToMain(int role) {
+        Intent intent = (role == 2)
+                ? new Intent(this, TeacherMainActivity.class)
+                : new Intent(this, MainActivity.class);
+        startActivity(intent);
         finish();
     }
 }

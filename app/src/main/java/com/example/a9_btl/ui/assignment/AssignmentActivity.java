@@ -111,6 +111,11 @@ public class AssignmentActivity extends AppCompatActivity {
             }
     );
 
+    private int getUserId() {
+        android.content.SharedPreferences prefs = getSharedPreferences("UserSession", MODE_PRIVATE);
+        return prefs.getInt("KEY_USER_ID", 1);
+    }
+
     // --- LOGIC NỘP BÀI ---
     private void submitAssignment() {
         String answerText = edtAnswer.getText().toString().trim();
@@ -121,8 +126,8 @@ public class AssignmentActivity extends AppCompatActivity {
             return;
         }
 
-        // Lưu vào DB (User ID tạm để là 1)
-        dbHelper.saveSubmission(1, currentChapterId, answerText, selectedFilePath);
+        // Lưu vào DB theo đúng ID của user đang đăng nhập
+        dbHelper.saveSubmission(getUserId(), currentChapterId, answerText, selectedFilePath);
 
         Toast.makeText(this, "Nộp bài thành công!", Toast.LENGTH_SHORT).show();
         finish(); // Đóng màn hình
@@ -130,8 +135,8 @@ public class AssignmentActivity extends AppCompatActivity {
 
     // Hàm kiểm tra bài cũ
     private void checkExistingSubmission() {
-        // User ID = 1
-        String[] oldData = dbHelper.getSubmissionDetail(1, currentChapterId);
+        // Đọc bài cũ theo đúng ID của user đang đăng nhập
+        String[] oldData = dbHelper.getSubmissionDetail(getUserId(), currentChapterId);
 
         if (oldData != null) {
             // Đổ dữ liệu cũ vào ô nhập
@@ -152,9 +157,8 @@ public class AssignmentActivity extends AppCompatActivity {
     }
 
     private void updateHeaderProgress() {
-        // 1. Lấy ID user
-        android.content.SharedPreferences prefs = getSharedPreferences("UserSession", MODE_PRIVATE);
-        int myId = prefs.getInt("KEY_USER_ID", 1);
+        // 1. Lấy ID user hiện tại
+        int myId = getUserId();
 
         // 2. Tìm chương hiện tại
         DatabaseHelper db = new DatabaseHelper(this);

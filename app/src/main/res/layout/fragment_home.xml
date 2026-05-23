@@ -216,4 +216,24 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!--  FAB: Mở AI Trợ Giảng                              -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabAiBot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="AI Trợ Giảng"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:icon="@android:drawable/ic_menu_help"
+        app:iconTint="#FFFFFF"
+        app:backgroundTint="#1565C0"
+        app:elevation="8dp" />
+
 </RelativeLayout>

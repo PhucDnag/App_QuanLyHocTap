@@ -172,6 +172,11 @@ public class QuestionActivity extends AppCompatActivity {
                 .show();
     }
 
+    private int getUserId() {
+        android.content.SharedPreferences prefs = getSharedPreferences("UserSession", MODE_PRIVATE);
+        return prefs.getInt("KEY_USER_ID", 1);
+    }
+
     // Tính điểm
     private void calculateScore() {
         if (timer != null) timer.cancel();
@@ -185,11 +190,9 @@ public class QuestionActivity extends AppCompatActivity {
             }
         }
 
-        // --- MỚI: LƯU ĐIỂM VÀO DATABASE ---
-        // Giả sử User ID là 1 (sau này bạn lấy từ Login)
-        // Giả sử currentChapterId được lấy từ Intent ở onCreate
+        // --- MỚI: LƯU ĐIỂM VÀO DATABASE THEO USER ĐĂNG NHẬP ---
         int chapterId = getIntent().getIntExtra("CHAPTER_ID", 1);
-        dbHelper.saveQuizScore(1, chapterId, score);
+        dbHelper.saveQuizScore(getUserId(), chapterId, score);
         // ----------------------------------
 
         // Hiển thị thông báo kết quả

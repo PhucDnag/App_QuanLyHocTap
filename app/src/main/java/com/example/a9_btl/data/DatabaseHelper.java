@@ -705,8 +705,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             isQuizPassed = true; // Không có quiz thì cho qua
         }
 
-        // --- ĐIỀU KIỆN 2: NỘP BÀI TẬP (Mới thêm) ---
-        // Gọi hàm vừa viết ở trên
+        // --- ĐIỀU KIỆN 2: NỘP BÀI TẬP ---
         boolean isAssignmentDone = isAssignmentSubmitted(userId, prevChapterId);
 
         // Nếu chương trước KHÔNG CÓ bài tập nào -> Thì coi như đã nộp (để không bị kẹt mãi mãi)
@@ -714,8 +713,73 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             isAssignmentDone = true;
         }
 
-        // KẾT QUẢ: Phải thoả mãn CẢ HAI (Quiz đậu VÀ Nộp bài xong)
-        return isQuizPassed && isAssignmentDone;
+        // --- ĐIỀU KIỆN 3: XEM TÀI LIỆU PDF & VIDEO (Mới thêm) ---
+        boolean isPdfViewed = isDocViewed(userId, prevChapterId, "PDF");
+        boolean isVideoViewed = isDocViewed(userId, prevChapterId, "Video");
+
+        // KẾT QUẢ: Phải thoả mãn TẤT CẢ (Quiz đậu VÀ Nộp bài xong VÀ Xem tài liệu đầy đủ)
+        return isQuizPassed && isAssignmentDone && isPdfViewed && isVideoViewed;
+    }
+
+    // --- LƯU TRẠNG THÁI XEM TÀI LIỆU ---
+    public void saveDocProgress(int userId, int chapterId, String docType, int status) {
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL("CREATE TABLE IF NOT EXISTS LichSuXem (MaNguoiDung INTEGER, MaChuong INTEGER, LoaiTaiLieu TEXT, TrangThai INTEGER, PRIMARY KEY (MaNguoiDung, MaChuong, LoaiTaiLieu))");
+            
+            android.content.ContentValues values = new android.content.ContentValues();
+            values.put("MaNguoiDung", userId);
+            values.put("MaChuong", chapterId);
+            values.put("LoaiTaiLieu", docType);
+            values.put("TrangThai", status);
+            db.replace("LichSuXem", null, values);
+        } catch (Exception ignored) {}
+    }
+
+    // --- KIỂM TRA ĐÃ XEM TÀI LIỆU CHƯA ---
+    public boolean isDocViewed(int userId, int chapterId, String docType) {
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            db.execSQL("CREATE TABLE IF NOT EXISTS LichSuXem (MaNguoiDung INTEGER, MaChuong INTEGER, LoaiTaiLieu TEXT, TrangThai INTEGER, PRIMARY KEY (MaNguoiDung, MaChuong, LoaiTaiLieu))");
+            
+            // Nếu không có tài liệu loại này thì mặc định coi như đã xem
+            boolean hasDoc = false;
+            Cursor cDoc = db.rawQuery("SELECT COUNT(*) FROM TaiLieu WHERE MaChuong=? AND Loai=?", new String[]{String.valueOf(chapterId), docType});
+            if (cDoc.moveToFirst()) {
+                hasDoc = cDoc.getInt(0) > 0;
+            }
+            cDoc.close();
+            if (!hasDoc) return true;
+
+            // Kiểm tra xem đã lưu trạng thái xem chưa
+            boolean viewed = false;
+            Cursor cView = db.rawQuery("SELECT TrangThai FROM LichSuXem WHERE MaNguoiDung=? AND MaChuong=? AND LoaiTaiLieu=?", 
+                    new String[]{String.valueOf(userId), String.valueOf(chapterId), docType});
+            if (cView.moveToFirst()) {
+                viewed = cView.getInt(0) == 1;
+            }
+            cView.close();
+            return viewed;
+        } catch (Exception e) {
+            return true; // Nếu lỗi mặc định cho qua
+        }
+    }
+
+    public boolean hasDocumentInChapter(int chapterId, String docType) {
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_DOCUMENT +
+                            " WHERE " + COL_DOC_CHAPTER_ID + "=? AND " + COL_DOC_TYPE + "=?",
+                    new String[]{String.valueOf(chapterId), docType});
+            boolean hasData = false;
+            if (cursor.moveToFirst()) {
+                hasData = cursor.getInt(0) > 0;
+            }
+            cursor.close();
+            return hasData;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     // Hàm phụ: Kiểm tra xem chương này có bài tập nào không?
@@ -1376,6 +1440,149 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // Cập nhật dòng có ID tương ứng
         db.update(TABLE_QUESTION, values, COL_Q_ID + "=?", new String[]{String.valueOf(questionId)});
+    }
+
+    // ══════════════════════════════════════════════════════
+    // TÍNH NĂNG: QUÉT TIẾN ĐỘ HỌC (SCAN STUDY PROGRESS)
+    // ══════════════════════════════════════════════════════
+
+    /** Model tiến độ từng chương */
+    public static class ChapterProgress {
+        public int    chapterId;
+        public String chapterName;
+        public boolean quizDone;        // Đã làm quiz chưa
+        public int    quizScore;        // Số câu đúng (-1 nếu chưa làm)
+        public int    totalQuestions;   // Tổng câu hỏi
+        public boolean assignmentDone;  // Đã nộp bài tập chưa
+        public boolean hasAssignment;   // Có bài tập không
+        public boolean pdfDone;         // Đã xem PDF chưa
+        public boolean hasPdf;          // Có file PDF không
+        public boolean videoDone;       // Đã xem Video chưa
+        public boolean hasVideo;        // Có file Video không
+
+        /** DONE = tất cả xong | PARTIAL = làm một phần | TODO = chưa làm gì */
+        public String getStatus() {
+            boolean allDone = (totalQuestions == 0 || quizDone)
+                    && (!hasAssignment || assignmentDone)
+                    && (!hasPdf || pdfDone)
+                    && (!hasVideo || videoDone);
+            boolean anyDone = quizDone || assignmentDone || pdfDone || videoDone;
+            if (allDone) return "DONE";
+            if (anyDone) return "PARTIAL";
+            return "TODO";
+        }
+
+        public int getProgressPercent() {
+            int parts = 0, done = 0;
+            if (totalQuestions > 0) { parts++; if (quizDone) done++; }
+            if (hasAssignment)       { parts++; if (assignmentDone) done++; }
+            if (hasPdf)              { parts++; if (pdfDone) done++; }
+            if (hasVideo)            { parts++; if (videoDone) done++; }
+            if (parts == 0) return 100;
+            return (done * 100) / parts;
+        }
+    }
+
+    /**
+     * Quét toàn bộ chương và trả về tiến độ học của user.
+     * Bao gồm: trạng thái quiz, điểm, trạng thái bài tập, pdf, video.
+     */
+    public List<ChapterProgress> getStudyProgress(int userId) {
+        List<ChapterProgress> result = new ArrayList<>();
+        List<Chapter> chapters = getAllChapters();
+
+        for (Chapter ch : chapters) {
+            ChapterProgress p = new ChapterProgress();
+            p.chapterId   = ch.getMaChuong();
+            p.chapterName = ch.getTenChuong();
+
+            // Quiz
+            p.totalQuestions = getQuestionCountByChapter(ch.getMaChuong());
+            p.quizScore      = getQuizScore(userId, ch.getMaChuong()); // -1 nếu chưa làm
+            p.quizDone       = (p.totalQuestions == 0) || (p.quizScore >= 0);
+
+            // Bài tập
+            p.hasAssignment   = hasAssignmentInChapter(ch.getMaChuong());
+            p.assignmentDone  = !p.hasAssignment || isAssignmentSubmitted(userId, ch.getMaChuong());
+
+            // PDF & Video
+            p.hasPdf     = hasDocumentInChapter(ch.getMaChuong(), "PDF");
+            p.pdfDone    = isDocViewed(userId, ch.getMaChuong(), "PDF");
+            p.hasVideo   = hasDocumentInChapter(ch.getMaChuong(), "Video");
+            p.videoDone  = isDocViewed(userId, ch.getMaChuong(), "Video");
+
+            result.add(p);
+        }
+        return result;
+    }
+
+    /** Lấy danh sách chương CHƯA hoàn thành (TODO hoặc PARTIAL) */
+    public List<ChapterProgress> getUnfinishedChapters(int userId) {
+        List<ChapterProgress> all = getStudyProgress(userId);
+        List<ChapterProgress> unfinished = new ArrayList<>();
+        for (ChapterProgress p : all) {
+            if (!"DONE".equals(p.getStatus())) {
+                unfinished.add(p);
+            }
+        }
+        return unfinished;
+    }
+
+    // ══════════════════════════════════════════════════════
+    // TÍNH NĂNG: AI KIỂM TRA BÀI TẬP ĐÃ NỘP
+    // ══════════════════════════════════════════════════════
+
+    /** Model chứa đề bài + bài làm của sinh viên để đưa cho AI chấm */
+    public static class SubmissionForReview {
+        public int    chapterId;
+        public String chapterName;
+        public String assignmentQuestion; // Đề bài
+        public String userAnswer;         // Bài làm của sinh viên
+    }
+
+    /**
+     * Lấy tất cả bài tập đã nộp của user (có đề bài + bài làm).
+     * Dùng để hiện danh sách cho AI review.
+     */
+    public List<SubmissionForReview> getSubmittedAssignments(int userId) {
+        List<SubmissionForReview> result = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // JOIN: NopBai → BaiTap → ChuongHoc
+        String query =
+            "SELECT ch." + COL_CHAPTER_ID + ", ch." + COL_CHAPTER_NAME +
+            ", bt." + COL_ASS_CONTENT +
+            ", nb." + COL_SUB_TEXT +
+            ", nb." + COL_SUB_FILE +
+            " FROM " + TABLE_SUBMISSION + " nb" +
+            " JOIN " + TABLE_ASSIGNMENT + " bt ON nb." + COL_SUB_ASS_ID + " = bt." + COL_ASS_ID +
+            " JOIN " + TABLE_CHAPTER + " ch ON bt." + COL_ASS_CHAPTER_ID + " = ch." + COL_CHAPTER_ID +
+            " WHERE nb." + COL_SUB_USER_ID + " = ?" +
+            " ORDER BY ch." + COL_CHAPTER_ORDER + " ASC";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userId)});
+        if (cursor.moveToFirst()) {
+            do {
+                SubmissionForReview s = new SubmissionForReview();
+                s.chapterId           = cursor.getInt(0);
+                s.chapterName         = cursor.getString(1);
+                s.assignmentQuestion  = cursor.getString(2);
+                s.userAnswer          = cursor.getString(3);
+                String filePath       = cursor.getString(4);
+
+                boolean hasText = (s.userAnswer != null && !s.userAnswer.trim().isEmpty());
+                boolean hasFile = (filePath != null && !filePath.trim().isEmpty());
+
+                if (hasText || hasFile) {
+                    if (!hasText) {
+                        s.userAnswer = "[Sinh viên đã nộp bài bằng file đính kèm. Định dạng file hiện tại AI chưa quét trực tiếp được nội dung. Hãy hướng dẫn sinh viên bổ sung bài làm bằng văn bản để chấm bài]";
+                    }
+                    result.add(s);
+                }
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return result;
     }
 
 }
