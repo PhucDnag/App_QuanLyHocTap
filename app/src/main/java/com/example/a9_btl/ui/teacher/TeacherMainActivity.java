@@ -14,7 +14,7 @@ import androidx.cardview.widget.CardView;
 import com.example.a9_btl.R;
 import com.example.a9_btl.data.DatabaseHelper;
 import com.example.a9_btl.ui.auth.LoginActivity;
-import com.example.a9_btl.ui.main.MainActivity; // Để mượn màn hình Profile/Chat nếu cần
+import com.example.a9_btl.ui.profile.ProfileActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -124,9 +124,7 @@ public class TeacherMainActivity extends AppCompatActivity {
                     return true;
                 }
                 else if (itemId == R.id.nav_profile) {
-                    // Tạm thời chuyển sang MainActivity và mở tab Profile (hoặc làm màn Profile riêng)
-                    Intent intent = new Intent(TeacherMainActivity.this, MainActivity.class);
-                    intent.putExtra("NAVIGATE_TO", "PROFILE");
+                    Intent intent = new Intent(TeacherMainActivity.this, ProfileActivity.class);
                     startActivity(intent);
                     return true;
                 }

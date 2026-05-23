@@ -26,6 +26,7 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true" />
+        <activity android:name=".ui.profile.ProfileActivity" />
         <activity android:name=".ui.main.StudentAbilityActivity" />
         <activity android:name=".ui.course.CourseActivity" />
         <activity android:name=".ui.course.LessonActivity" />

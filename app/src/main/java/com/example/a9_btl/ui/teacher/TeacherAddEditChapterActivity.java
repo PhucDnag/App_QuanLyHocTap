@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
+import android.text.InputType;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -49,6 +50,13 @@ public class TeacherAddEditChapterActivity extends AppCompatActivity {
         edtVideo = findViewById(R.id.edtVideo);
         edtAssignment = findViewById(R.id.edtAssignment);
         tvTitle = findViewById(R.id.tvTitle);
+
+        edtPdf.setInputType(InputType.TYPE_NULL);
+        edtPdf.setFocusable(false);
+        edtPdf.setOnClickListener(v -> openFileChooser("application/pdf", PICK_PDF_REQUEST));
+        edtVideo.setInputType(InputType.TYPE_NULL);
+        edtVideo.setFocusable(false);
+        edtVideo.setOnClickListener(v -> openFileChooser("video/*", PICK_VIDEO_REQUEST));
 
         Button btnSubmit = findViewById(R.id.btnSubmit);
         ImageButton btnPickPdf = findViewById(R.id.btnPickPdf);

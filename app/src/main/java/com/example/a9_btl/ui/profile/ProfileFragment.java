@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,25 +134,63 @@ public class ProfileFragment extends Fragment {
         }
 
         try {
-            requireContext().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        } catch (SecurityException ignored) {
-            // Một số trình chọn ảnh không cấp persistable permission, vẫn lưu URI để dùng trong phiên hiện tại.
+            Uri localAvatarUri = copyAvatarToInternalStorage(uri, currentUserId);
+            settingsPrefs.edit()
+                    .putString(KEY_AVATAR_URI_PREFIX + currentUserId, localAvatarUri.toString())
+                    .apply();
+            imgAvatar.setImageURI(localAvatarUri);
+            Toast.makeText(requireContext(), "Đã cập nhật ảnh đại diện", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            imgAvatar.setImageResource(R.drawable.ic_launcher_background);
+            Toast.makeText(requireContext(), "Không thể lưu ảnh đại diện", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private Uri copyAvatarToInternalStorage(Uri sourceUri, int userId) throws Exception {
+        File avatarDir = new File(requireContext().getFilesDir(), "avatars");
+        if (!avatarDir.exists() && !avatarDir.mkdirs()) {
+            throw new IllegalStateException("Không thể tạo thư mục avatar");
         }
 
-        sessionPrefs.edit()
-                .putString(KEY_AVATAR_URI_PREFIX + currentUserId, uri.toString())
-                .apply();
-        imgAvatar.setImageURI(uri);
-        Toast.makeText(requireContext(), "Đã cập nhật ảnh đại diện", Toast.LENGTH_SHORT).show();
+        File avatarFile = new File(avatarDir, "avatar_" + userId + ".jpg");
+        try (InputStream inputStream = requireContext().getContentResolver().openInputStream(sourceUri);
+             FileOutputStream outputStream = new FileOutputStream(avatarFile, false)) {
+            if (inputStream == null) {
+                throw new IllegalStateException("Không thể đọc ảnh đã chọn");
+            }
+            byte[] buffer = new byte[8192];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+        }
+        return Uri.fromFile(avatarFile);
     }
 
     private void loadAvatar(int userId) {
-        String avatarUri = sessionPrefs.getString(KEY_AVATAR_URI_PREFIX + userId, null);
+        String avatarUri = settingsPrefs.getString(KEY_AVATAR_URI_PREFIX + userId, null);
         if (avatarUri != null && !avatarUri.isEmpty()) {
-            imgAvatar.setImageURI(Uri.parse(avatarUri));
+            try {
+                Uri uri = Uri.parse(avatarUri);
+                if ("file".equals(uri.getScheme())) {
+                    File avatarFile = new File(uri.getPath() == null ? "" : uri.getPath());
+                    if (!avatarFile.exists()) {
+                        clearSavedAvatar(userId);
+                        return;
+                    }
+                }
+                imgAvatar.setImageURI(uri);
+            } catch (Exception e) {
+                clearSavedAvatar(userId);
+            }
         } else {
             imgAvatar.setImageResource(R.drawable.ic_launcher_background);
         }
+    }
+
+    private void clearSavedAvatar(int userId) {
+        settingsPrefs.edit().remove(KEY_AVATAR_URI_PREFIX + userId).apply();
+        imgAvatar.setImageResource(R.drawable.ic_launcher_background);
     }
 
     private void toggleDarkMode() {
