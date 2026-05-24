@@ -954,6 +954,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return name.replace("Chương " + chapter.getMaChuong() + ":", "").trim();
     }
 
+    public boolean isChapterCompleted(int userId, int chapterId) {
+        int totalQuestions = getQuestionCountByChapter(chapterId);
+        int score = getQuizScore(userId, chapterId);
+        boolean isQuizPassed = totalQuestions == 0 || (score >= 0 && ((double) score / totalQuestions) * 10 >= 5.0);
+
+        boolean isAssignmentDone = !hasAssignmentInChapter(chapterId) || isAssignmentSubmitted(userId, chapterId);
+        boolean isPdfViewed = isDocViewed(userId, chapterId, "PDF");
+        boolean isVideoViewed = isDocViewed(userId, chapterId, "Video");
+
+        return isQuizPassed && isAssignmentDone && isPdfViewed && isVideoViewed;
+    }
+
+    // Hàm tìm chương đang học: chương đầu tiên đã mở nhưng chưa hoàn thành.
+    public Chapter getCurrentLearningChapter(int userId) {
+        List<Chapter> chapters = getAllChapters();
+        Chapter lastUnlocked = null;
+
+        for (Chapter c : chapters) {
+            if (!isChapterUnlocked(userId, c.getMaChuong())) {
+                break;
+            }
+
+            lastUnlocked = c;
+            if (!isChapterCompleted(userId, c.getMaChuong())) {
+                return c;
+            }
+        }
+
+        if (lastUnlocked != null) return lastUnlocked;
+        if (!chapters.isEmpty()) return chapters.get(0);
+        return null;
+    }
+
     // Hàm tìm Chương cao nhất đang được mở
     public Chapter getCurrentChapter(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();

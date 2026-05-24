@@ -23,20 +23,19 @@ import com.google.android.material.navigation.NavigationBarView;
 public class CourseActivity extends AppCompatActivity {
 
     private View btnBack;
+    private RecyclerView rcv;
+    private DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course); // Layout mới đã có bottomNavigation
 
-        RecyclerView rcv = findViewById(R.id.rcvCourse);
+        rcv = findViewById(R.id.rcvCourse);
         rcv.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this)); // Xếp dọc
 
-        DatabaseHelper db = new DatabaseHelper(this);
-        java.util.List<Chapter> chapters = db.getAllChapters();
-
-        CourseAdapter adapter = new CourseAdapter(this, chapters);
-        rcv.setAdapter(adapter);
+        db = new DatabaseHelper(this);
+        loadData();
 
         // Nút Back
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
@@ -50,14 +49,19 @@ public class CourseActivity extends AppCompatActivity {
         setupBottomNavigation();
     }
 
+    private void loadData() {
+        java.util.List<Chapter> chapters = db.getAllChapters();
+        CourseAdapter adapter = new CourseAdapter(this, chapters);
+        rcv.setAdapter(adapter);
+    }
+
     private void updateHeaderProgress() {
         // 1. Lấy ID user
         android.content.SharedPreferences prefs = getSharedPreferences("UserSession", MODE_PRIVATE);
         int myId = prefs.getInt("KEY_USER_ID", 1);
 
-        // 2. Tìm chương hiện tại
-        DatabaseHelper db = new DatabaseHelper(this);
-        Chapter currentChapter = db.getCurrentChapter(myId);
+        // 2. Tìm chương hiện tại đang học: chương đầu tiên chưa hoàn thành.
+        Chapter currentChapter = db.getCurrentLearningChapter(myId);
 
         // 3. Ánh xạ và gán chữ lên thẻ Tiến độ
         TextView tvCurrentChapter = findViewById(R.id.tvCurrentChapter); // ID trong XML
@@ -69,6 +73,7 @@ public class CourseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        loadData();
         updateHeaderProgress(); // <--- GỌI HÀM NÀY
         // ... các code load dữ liệu khác
     }

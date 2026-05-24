@@ -46,13 +46,9 @@ public class LessonActivity extends AppCompatActivity {
         cardQuiz = findViewById(R.id.cardQuiz);
         cardAssignment = findViewById(R.id.cardAssignment);
 
-        // Nhận dữ liệu
-        if (getIntent().hasExtra("CHAPTER_NAME")) {
-            currentChapterName = getIntent().getStringExtra("CHAPTER_NAME");
-        }
-        if (getIntent().hasExtra("CHAPTER_ID")) {
-            currentChapterId = getIntent().getIntExtra("CHAPTER_ID", 1);
-        }
+        // Nhận dữ liệu chương đang mở
+        syncChapterFromIntentOrCurrent();
+        updateChapterTitle();
 
         // Back
         btnBack.setOnClickListener(v -> finish());
@@ -130,6 +126,7 @@ public class LessonActivity extends AppCompatActivity {
         // Quiz
         cardQuiz.setOnClickListener(v -> {
             Intent intent = new Intent(LessonActivity.this, QuizActivity.class);
+            intent.putExtra("CHAPTER_ID", currentChapterId);
             intent.putExtra("CHAPTER_NAME", currentChapterName);
             startActivity(intent);
         });
@@ -137,6 +134,8 @@ public class LessonActivity extends AppCompatActivity {
         // Assignment
         cardAssignment.setOnClickListener(v -> {
             Intent intent = new Intent(LessonActivity.this, com.example.androidlearn.ui.assignment.AssignmentListActivity.class);
+            intent.putExtra("CHAPTER_ID", currentChapterId);
+            intent.putExtra("CHAPTER_NAME", currentChapterName);
             startActivity(intent);
         });
     }
@@ -156,9 +155,18 @@ public class LessonActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        syncChapterFromIntentOrCurrent();
+        updateChapterTitle();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        updateHeaderProgress();
+        syncChapterFromIntentOrCurrent();
+        updateChapterTitle();
     }
 
     private int getUserId() {
@@ -166,12 +174,33 @@ public class LessonActivity extends AppCompatActivity {
         return prefs.getInt("KEY_USER_ID", 1);
     }
 
-    private void updateHeaderProgress() {
-        if (tvCurrentChapter == null) return;
-        int myId = getUserId();
-        Chapter current = dbHelper.getCurrentChapter(myId);
-        if (current != null) {
-            tvCurrentChapter.setText(current.getTenChuong());
+    private void syncChapterFromIntentOrCurrent() {
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("CHAPTER_ID")) {
+            currentChapterId = intent.getIntExtra("CHAPTER_ID", currentChapterId);
+        } else {
+            Chapter current = dbHelper.getCurrentLearningChapter(getUserId());
+            if (current != null) {
+                currentChapterId = current.getMaChuong();
+            }
+        }
+
+        if (intent != null && intent.hasExtra("CHAPTER_NAME")) {
+            String name = intent.getStringExtra("CHAPTER_NAME");
+            if (name != null && !name.trim().isEmpty()) {
+                currentChapterName = name;
+            }
+        } else {
+            Chapter chapter = dbHelper.getChapterById(currentChapterId);
+            if (chapter != null) {
+                currentChapterName = chapter.getTenChuong();
+            }
+        }
+    }
+
+    private void updateChapterTitle() {
+        if (tvCurrentChapter != null) {
+            tvCurrentChapter.setText(currentChapterName);
         }
     }
 

@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardRoot"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="wrap_content"
+    android:minHeight="120dp"
     android:layout_margin="8dp"
     app:cardCornerRadius="16dp"
     app:strokeColor="@color/black"
@@ -13,29 +14,36 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="120dp"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="8dp">
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/tvChapterName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Chương 1"
             android:textStyle="bold"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textColor="@color/black"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:maxLines="4"
+            android:ellipsize="end"
+            android:includeFontPadding="true" />
 
         <TextView
             android:id="@+id/tvScore"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="18/20"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:layout_marginTop="8dp"
-            android:textColor="#333333"/>
+            android:textColor="#333333"
+            android:gravity="center"
+            android:maxLines="2"
+            android:ellipsize="end" />
 
     </LinearLayout>
 
