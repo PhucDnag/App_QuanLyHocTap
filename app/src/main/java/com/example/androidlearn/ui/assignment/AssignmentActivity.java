@@ -1,8 +1,10 @@
 package com.example.androidlearn.ui.assignment;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -20,6 +22,10 @@ import com.example.androidlearn.model.Chapter;
 import com.example.androidlearn.ui.main.MainActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 public class AssignmentActivity extends AppCompatActivity {
 
@@ -87,8 +93,10 @@ public class AssignmentActivity extends AppCompatActivity {
 
     // --- LOGIC CHỌN FILE ---
     private void openFilePicker() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("*/*"); // Cho phép chọn mọi loại file
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
         // Chỉ định rõ PDF và Word nếu muốn:
         String[] mimeTypes = {"application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"};
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
@@ -103,13 +111,74 @@ public class AssignmentActivity extends AppCompatActivity {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     Uri uri = result.getData().getData();
                     if (uri != null) {
-                        selectedFilePath = uri.toString();
-                        tvFileName.setText("Đã chọn: " + uri.getLastPathSegment());
+                        try {
+                            final int flags = result.getData().getFlags()
+                                    & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                            getContentResolver().takePersistableUriPermission(uri, flags & Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        } catch (Exception ignored) {
+                        }
+                        String copiedPath = copyPickedFileToInternalStorage(uri);
+                        if (copiedPath == null || copiedPath.isEmpty()) {
+                            selectedFilePath = uri.toString();
+                            tvFileName.setText("Đã chọn: " + getDisplayFileName(uri));
+                            Toast.makeText(this, "Không copy được file, app sẽ thử lưu quyền đọc URI.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            selectedFilePath = copiedPath;
+                            tvFileName.setText("Đã chọn: " + new File(copiedPath).getName());
+                        }
                         tvFileName.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
                     }
                 }
             }
     );
+
+    private String copyPickedFileToInternalStorage(Uri uri) {
+        String displayName = getDisplayFileName(uri);
+        File dir = new File(getFilesDir(), "submissions");
+        if (!dir.exists() && !dir.mkdirs()) {
+            return "";
+        }
+
+        String safeName = displayName.replaceAll("[^a-zA-Z0-9._-]", "_");
+        if (safeName.trim().isEmpty()) {
+            safeName = "submission_file";
+        }
+        File target = new File(dir, getUserId() + "_" + currentChapterId + "_" + System.currentTimeMillis() + "_" + safeName);
+
+        try (InputStream input = getContentResolver().openInputStream(uri);
+             FileOutputStream output = new FileOutputStream(target)) {
+            if (input == null) return "";
+            byte[] buffer = new byte[8192];
+            int read;
+            while ((read = input.read(buffer)) != -1) {
+                output.write(buffer, 0, read);
+            }
+            output.flush();
+            return target.getAbsolutePath();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    private String getDisplayFileName(Uri uri) {
+        String name = null;
+        try (Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                if (nameIndex >= 0) {
+                    name = cursor.getString(nameIndex);
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        if (name == null || name.trim().isEmpty()) {
+            name = uri.getLastPathSegment();
+        }
+        if (name == null || name.trim().isEmpty()) {
+            name = "submission_file";
+        }
+        return name;
+    }
 
     private int getUserId() {
         android.content.SharedPreferences prefs = getSharedPreferences("UserSession", MODE_PRIVATE);

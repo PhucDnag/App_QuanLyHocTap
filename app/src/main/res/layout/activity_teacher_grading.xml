@@ -38,6 +38,36 @@
                 <TextView android:id="@+id/tvStudentAnswer" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp" android:text="Sinh viên chưa nộp bài..." android:textColor="#000" android:background="#FFF3E0"/>
             </androidx.cardview.widget.CardView>
 
+            <TextView
+                android:id="@+id/tvAttachmentLabel"
+                android:text="File đính kèm:"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardAttachment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="#E3F2FD"
+                android:visibility="gone"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
+                <TextView
+                    android:id="@+id/tvAttachment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="Mở file đã nộp"
+                    android:textColor="#0D47A1"
+                    android:textStyle="bold" />
+            </androidx.cardview.widget.CardView>
+
             <TextView android:text="Điểm số:" android:layout_marginTop="20dp" android:layout_width="match_parent" android:layout_height="wrap_content"/>
             <EditText android:id="@+id/edtScore" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Nhập điểm (0-10)" android:inputType="numberDecimal" android:background="@android:drawable/edit_text"/>
 

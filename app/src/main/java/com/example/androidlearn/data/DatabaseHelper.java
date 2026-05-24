@@ -493,7 +493,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(COL_SUB_ASS_ID, assId);
             values.put(COL_SUB_TEXT, text);
             values.put(COL_SUB_FILE, filePath);
-            db.insert(TABLE_SUBMISSION, null, values);
+            values.put(COL_SUB_GRADE, -1);
+            values.put(COL_SUB_FEEDBACK, "");
+
+            int updatedRows = db.update(TABLE_SUBMISSION, values,
+                    COL_SUB_USER_ID + "=? AND " + COL_SUB_ASS_ID + "=?",
+                    new String[] { String.valueOf(userId), String.valueOf(assId) });
+            if (updatedRows == 0) {
+                db.insert(TABLE_SUBMISSION, null, values);
+            }
         }
     }
 
@@ -515,7 +523,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (assId > 0) {
             // Tìm trong bảng NopBai
             Cursor c2 = db.rawQuery("SELECT " + COL_SUB_TEXT + ", " + COL_SUB_FILE + " FROM " + TABLE_SUBMISSION +
-                    " WHERE " + COL_SUB_USER_ID + "=? AND " + COL_SUB_ASS_ID + "=?",
+                    " WHERE " + COL_SUB_USER_ID + "=? AND " + COL_SUB_ASS_ID + "=?" +
+                    " ORDER BY CASE WHEN " + COL_SUB_FILE + " IS NOT NULL AND " + COL_SUB_FILE + " != '' THEN 0 ELSE 1 END, " + COL_SUB_ID + " DESC LIMIT 1",
                     new String[] { String.valueOf(userId), String.valueOf(assId) });
 
             if (c2.moveToFirst()) {
@@ -1277,7 +1286,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Cursor c2 = db.rawQuery(
                     "SELECT " + COL_SUB_TEXT + ", " + COL_SUB_FILE + ", " + COL_SUB_GRADE + ", " + COL_SUB_FEEDBACK +
                             " FROM " + TABLE_SUBMISSION +
-                            " WHERE " + COL_SUB_USER_ID + "=? AND " + COL_SUB_ASS_ID + "=?",
+                            " WHERE " + COL_SUB_USER_ID + "=? AND " + COL_SUB_ASS_ID + "=?" +
+                            " ORDER BY CASE WHEN " + COL_SUB_FILE + " IS NOT NULL AND " + COL_SUB_FILE + " != '' THEN 0 ELSE 1 END, " + COL_SUB_ID + " DESC LIMIT 1",
                     new String[] { String.valueOf(userId), String.valueOf(assId) });
             if (c2.moveToFirst()) {
                 result = new String[4];
