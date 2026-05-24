@@ -36,7 +36,7 @@ public class GeminiRepository {
     private static final String TAG = "GeminiRepository";
 
     // ── Cấu hình OpenRouter ───────────────────────────────────────────
-    private static final String API_KEY = "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";
+    private static final String API_KEY  = "api_key_your";
     private static final String BASE_URL = "https://openrouter.ai/api/v1/chat/completions";
 
     private static final String[] MODELS = {
@@ -48,24 +48,19 @@ public class GeminiRepository {
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     // ── System Prompt ─────────────────────────────────────────────────
-    private static final String SYSTEM_PROMPT = "Bạn là trợ lý lập trình Android thông minh của ứng dụng QuanLyHocTap. "
-            +
-            "Hãy trả lời bằng tiếng Việt cực kỳ ngắn gọn, súc tích, đi thẳng trực diện vào vấn đề, không giải thích khái niệm dài dòng lan man, không đề xuất hay gợi ý phương pháp học tập. "
-            +
-            "Nhiệm vụ chính của bạn là giải đáp toàn bộ các câu hỏi về lập trình Android, kiến trúc máy tính, chấm điểm và review bài tập của sinh viên. "
-            +
+    private static final String SYSTEM_PROMPT =
+            "Bạn là trợ lý lập trình Android thông minh của ứng dụng QuanLyHocTap. " +
+            "Hãy trả lời bằng tiếng Việt cực kỳ ngắn gọn, súc tích, đi thẳng trực diện vào vấn đề, không giải thích khái niệm dài dòng lan man, không đề xuất hay gợi ý phương pháp học tập. " +
+            "Nhiệm vụ chính của bạn là giải đáp toàn bộ các câu hỏi về lập trình Android, kiến trúc máy tính, chấm điểm và review bài tập của sinh viên. " +
             "Hãy thân thiện chào hỏi và tương tác cơ bản khi bắt đầu cuộc trò chuyện. " +
-            "Nếu là lập trình Android: cung cấp giải pháp hoặc code (Java/Kotlin, XML Layouts) tối ưu, giải thích siêu ngắn (1-2 câu). "
-            +
+            "Nếu là lập trình Android: cung cấp giải pháp hoặc code (Java/Kotlin, XML Layouts) tối ưu, giải thích siêu ngắn (1-2 câu). " +
             "Hạn chế các định dạng danh sách gạch đầu dòng phức tạp, trả lời gọn gàng và tối giản nhất. " +
             "Hãy luôn hỗ trợ nhiệt tình, KHÔNG từ chối các câu hỏi liên quan đến lập trình, máy tính, học tập hoặc tương tác thông thường.";
 
     // ── Callback Interface ────────────────────────────────────────────
     public interface StreamCallback {
         void onToken(String token);
-
         void onComplete();
-
         void onError(String errorMessage);
     }
 
@@ -95,7 +90,7 @@ public class GeminiRepository {
                 .addHeader("Authorization", "Bearer " + API_KEY)
                 .addHeader("Content-Type", "application/json")
                 .addHeader("HTTP-Referer", "https://github.com/QuanLyHocTap") // optional
-                .addHeader("X-Title", "QuanLyHocTap AI Bot") // optional
+                .addHeader("X-Title", "QuanLyHocTap AI Bot")                  // optional
                 .build();
 
         currentCall = client.newCall(request);
@@ -149,20 +144,14 @@ public class GeminiRepository {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
 
             String line;
-            boolean receivedAnyData = false;
-            StringBuilder nonSseBuffer = new StringBuilder();
-
             while ((line = reader.readLine()) != null) {
                 if (line.isEmpty())
                     continue;
 
                 Log.d(TAG, "Received line: " + line);
 
-                if (!line.startsWith("data: ")) {
-                    // Có thể là non-streaming JSON error response
-                    nonSseBuffer.append(line);
+                if (!line.startsWith("data: "))
                     continue;
-                }
 
                 String jsonStr = line.substring(6).trim();
 
@@ -171,43 +160,9 @@ public class GeminiRepository {
                     return;
                 }
 
-                // Kiểm tra error trong chunk
-                try {
-                    JSONObject root = new JSONObject(jsonStr);
-                    if (root.has("error")) {
-                        JSONObject error = root.optJSONObject("error");
-                        String errMsg = error != null ? error.optString("message", "Lỗi từ AI server")
-                                : root.optString("error", "Lỗi từ AI server");
-                        Log.e(TAG, "API error in stream: " + errMsg);
-                        callback.onError(errMsg);
-                        return;
-                    }
-                } catch (JSONException ignored) {
-                    // Không phải JSON hoặc không có error — tiếp tục parse token bình thường
-                }
-
                 String token = extractTokenFromChunk(jsonStr);
                 if (token != null && !token.isEmpty()) {
-                    receivedAnyData = true;
                     callback.onToken(token);
-                }
-            }
-
-            // Kiểm tra non-SSE buffer (trường hợp server trả JSON error thay vì SSE)
-            if (!receivedAnyData && nonSseBuffer.length() > 0) {
-                String rawJson = nonSseBuffer.toString().trim();
-                Log.e(TAG, "Non-SSE response: " + rawJson);
-                try {
-                    JSONObject errorRoot = new JSONObject(rawJson);
-                    if (errorRoot.has("error")) {
-                        JSONObject error = errorRoot.optJSONObject("error");
-                        String errMsg = error != null ? error.optString("message", "Lỗi từ server")
-                                : errorRoot.optString("error", "Lỗi từ server");
-                        callback.onError(errMsg);
-                        return;
-                    }
-                } catch (JSONException e) {
-                    Log.w(TAG, "Cannot parse non-SSE response");
                 }
             }
 
@@ -247,22 +202,22 @@ public class GeminiRepository {
     /**
      * Build request body theo format OpenAI Chat Completions.
      * {
-     * "model": "...",
-     * "stream": true,
-     * "messages": [
-     * {"role": "system", "content": "..."},
-     * {"role": "user", "content": "..."},
-     * {"role": "assistant", "content": "..."}
-     * ]
+     *   "model": "...",
+     *   "stream": true,
+     *   "messages": [
+     *     {"role": "system", "content": "..."},
+     *     {"role": "user",   "content": "..."},
+     *     {"role": "assistant", "content": "..."}
+     *   ]
      * }
      */
     private String buildRequestBody(List<AiMessage> history) {
         try {
             JSONObject root = new JSONObject();
-
+            
             // Gán model chính mặc định (bắt buộc theo schema của API)
             root.put("model", MODELS[0]);
-
+            
             JSONArray modelsArray = new JSONArray();
             for (String m : MODELS) {
                 modelsArray.put(m);
