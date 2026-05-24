@@ -53,11 +53,12 @@
                         android:text="Spider Chart theo mảng kiến thức"
                         android:textColor="#1976D2"
                         android:textStyle="bold" />
-                    <com.example.a9_btl.utils.SimpleChartView
+                    <com.example.androidlearn.utils.SimpleChartView
                         android:id="@+id/chartAbility"
                         android:layout_width="match_parent"
-                        android:layout_height="320dp"
-                        android:layout_marginTop="8dp" />
+                        android:layout_height="300dp"
+                        android:layout_marginTop="8dp"
+                        android:padding="20dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

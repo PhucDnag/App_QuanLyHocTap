@@ -46,6 +46,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
+        android:elevation="12dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:labelVisibilityMode="labeled"
+        app:itemIconTint="@color/nav_item_colors"
+        app:itemTextColor="@color/nav_item_colors"
         app:menu="@menu/bottom_nav_menu" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -55,6 +61,7 @@
         android:layout_below="@id/layoutHeader"
         android:layout_above="@id/bottomNavTeacher"
         android:paddingTop="8dp"
+        android:paddingBottom="12dp"
         android:clipToPadding="false"/>
 
 </RelativeLayout>
