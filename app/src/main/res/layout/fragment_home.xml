@@ -72,7 +72,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Chương 2: CPU"
+                        android:text="Chương 2: ..."
                         android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />

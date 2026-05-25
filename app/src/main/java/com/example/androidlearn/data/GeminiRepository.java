@@ -36,7 +36,7 @@ public class GeminiRepository {
     private static final String TAG = "GeminiRepository";
 
     // ── Cấu hình OpenRouter ───────────────────────────────────────────
-    private static final String API_KEY  = "api_key_your";
+    private static final String API_KEY  = "your_api_key";
     private static final String BASE_URL = "https://openrouter.ai/api/v1/chat/completions";
 
     private static final String[] MODELS = {
