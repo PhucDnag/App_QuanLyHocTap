@@ -36,10 +36,10 @@ public class TeacherCourseListActivity extends AppCompatActivity {
         tvCourseSummary = findViewById(R.id.tvCourseSummary);
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
-        // Nút Thêm Mới
+        // Nút Thêm Mới: mở màn hình thêm nhanh dùng layout activity_add_chapter.xml
         Button btnNew = findViewById(R.id.btnNewChapter);
         btnNew.setOnClickListener(v -> {
-            Intent intent = new Intent(this, TeacherAddEditChapterActivity.class);
+            Intent intent = new Intent(this, AddChapterActivity.class);
             startActivity(intent);
         });
 

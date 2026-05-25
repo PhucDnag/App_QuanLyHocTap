@@ -78,7 +78,7 @@
                     android:id="@+id/tvQuestionContent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Câu 1: CPU viết tắt là gì?"
+                    android:text="Câu 1: ..."
                     android:textSize="18sp"
                     android:textColor="@color/black"
                     android:textStyle="bold"
